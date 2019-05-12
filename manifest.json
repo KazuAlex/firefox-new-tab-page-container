@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "New Tab Container",
+  "version": "1.0",
+ 
+  "description": "Choose container on new tab page",
+
+  "icons": {
+    "32": "icons/new-tab-32.png"
+  },
+  
+  "browser_action": {
+    "default_icon": "icons/new-tab-32.png",
+    "default_title": "New Tab Container"
+  },
+
+  "permissions": [
+    "contextualIdentities",
+    "cookies",
+    "tabs"
+  ],
+ 
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>", "*://*/*"]
+    }
+  ],
+
+  "background": {
+    "scripts": [ "background.js" ]
+  }
+}

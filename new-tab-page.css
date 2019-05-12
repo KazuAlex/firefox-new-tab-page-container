@@ -1,0 +1,105 @@
+body {
+  font-family: sans-serif;
+}
+body code {
+  font-size: 1.2em;
+  display: block;
+}
+body code.title {
+  font-size: 1.6em;
+}
+#flex {
+  display: flex;
+  justify-content: center;
+}
+.tile-group {
+  font-size: 0;
+  margin: 30px 0;
+}
+.tile-group .tile {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 250px;
+  margin: 2px;
+  font-size: 20px;
+  overflow: hidden;
+  vertical-align: top;
+  transition: background-color 150ms;
+  cursor: pointer;
+  color: white;
+}
+.tile-group .tile .content {
+  text-align: center;
+  user-select: none;
+}
+.tile-group .tile .content .icon {
+  position: relative;
+  font-size: 2.5em;
+  top: 0;
+  transition: top 150ms, font-size 150ms;
+}
+.tile-group .tile .content .icon img {
+  filter: invert(1);
+}
+.tile-group .tile .content .title {
+  position: relative;
+  font-size: 1.2em;
+  opacity: 1;
+  transition: opacity 150ms;
+  letter-spacing: 2px;
+}
+.tile-group .tile .content .msg {
+  position: absolute;
+  top: 250px;
+  left: 0;
+  width: 100%;
+  transition: top 150ms;
+  font-family: monospace;
+  font-size: 0.8em;
+}
+.tile-group .tile:hover {
+  background-color: #333;
+}
+.tile-group .tile:hover.msg-tile .icon {
+  font-size: 1.8em;
+  top: -62.5px;
+}
+.tile-group .tile:hover.msg-tile .title {
+  opacity: 0;
+}
+.tile-group .tile:hover.msg-tile .msg {
+  top: 125px;
+}
+.tile-group.colorful .tile.spotify:hover {
+  background-color: #1ed760;
+  border-color: #1ed760;
+  outline: 1px solid #1ed760;
+}
+.tile-group.colorful .tile.less:hover {
+  background-color: #1d365d;
+  border-color: #1d365d;
+  outline: 1px solid #1d365d;
+}
+.tile-group.colorful .tile.discord:hover {
+  background-color: #7289da;
+  border-color: #7289da;
+  outline: 1px solid #7289da;
+}
+.tile-group.colorful .tile.bandcamp:hover {
+  background-color: #639aa9;
+  border-color: #639aa9;
+  outline: 1px solid #639aa9;
+}
+.tile-group.colorful .tile.whatsapp:hover {
+  background-color: #5ed054;
+  border-color: #5ed054;
+  outline: 1px solid #5ed054;
+}
+.tile-group.colorful .tile.youtube:hover {
+  background-color: #f00;
+  border-color: #f00;
+  outline: 1px solid #f00;
+}
