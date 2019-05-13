@@ -28,6 +28,7 @@ function eventHandler(event) {
 
 function attachAction(tile, identity) {
   tile.dataset.identity = identity.cookieStoreId;
+  tile.dataset.name = identity.name;
   tile.addEventListener('click', eventHandler);
 }
 
@@ -90,3 +91,32 @@ var updateWidth = () => {
   let nbElem = Math.floor((document.documentElement.clientWidth - 40) / 254);
   div.style.width = (nbElem * 254) + 'px';
 }
+
+var search = document.getElementById('search');
+
+var performSearch = function() {
+  let searchVal = search.value;
+  browser.tabs.getCurrent().then((tabInfo) => {
+    browser.search.search({
+      query: searchVal,
+      tabId: tabInfo.id,
+    });
+  });
+}
+search.addEventListener('keyup', function(event) {
+  let value = search.value;
+  if (value) {
+    value = value.toLowerCase().trim();
+  }
+  let elements = document.getElementsByClassName('tile');
+  for (let elem of elements) {
+    console.log(elem.style);
+    let name = elem.dataset.name;
+    if (search.length === 0 || (name && name.toLowerCase().trim().includes(value))) {
+      elem.style.display = null;
+    } else {
+      elem.style.display = 'none';
+    }
+  }
+});
+document.getElementById('searchBtn', performSearch);

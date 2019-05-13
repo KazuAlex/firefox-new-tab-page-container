@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "New Tab Container",
+  "name": "New Tab Page Container",
   "version": "1.0",
  
   "description": "Choose container on new tab page",
@@ -25,6 +25,10 @@
       "matches": ["<all_urls>", "*://*/*"]
     }
   ],
+
+  "chrome_url_overrides" : {
+    "newtab": "new-tab-page.html"
+  },
 
   "background": {
     "scripts": [ "background.js" ]
