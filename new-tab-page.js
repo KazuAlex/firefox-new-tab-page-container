@@ -51,7 +51,7 @@ function createTile(identity) {
 
   let title = document.createElement('div');
   title.className = "title";
-  title.innerHTML = identity.name;
+  title.appendChild(document.createTextNode(identity.name));
 
   content.appendChild(title);
   tile.appendChild(content);
