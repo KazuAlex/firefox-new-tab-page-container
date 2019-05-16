@@ -3,7 +3,7 @@ Hi there!
   
 This is the repository for New tab page container extension for Firefox.  
   
-This extension show you all your containers on new tab page.  
+This extension show you all your containers on new tab page. You can also edit them.  
 Obviously, this extension required [Firefox Multi-Account Containers](https://addons.mozilla.org/fr/firefox/addon/multi-account-containers/)  
   
 ## Next steps
