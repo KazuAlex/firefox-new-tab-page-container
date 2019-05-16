@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
   "name": "New Tab Page Container",
-  "version": "1.1",
+  "version": "1.2",
  
-  "description": "Choose container on new tab page",
+  "description": "Show contextual identities on new tab page",
 
   "icons": {
     "32": "icons/new-tab-32.png",
@@ -13,7 +13,7 @@
   
   "browser_action": {
     "default_icon": "icons/new-tab-32.png",
-    "default_title": "New Tab Container"
+    "default_title": "New Tab Page Container"
   },
 
   "permissions": [
