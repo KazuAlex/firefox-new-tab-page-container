@@ -12,6 +12,45 @@ body {
   padding-bottom: 20px;
   background-color: #ffffff;
   top: 0;
+  z-index: 2;
+}
+#mode {
+  width: 90vw;
+}
+#containerColors .btn {
+  color: #ffffff;
+  transition: transform 300ms, border-color 300ms;
+}
+#containerColors .btn.active {
+  border-color: #555555;
+  transform: translate(0, -3px);
+}
+#containerColors .btn:hover,
+#containerIcons .btn:hover {
+  z-index: 0;
+}
+#containerColors .btn.active:hover,
+#containerIcons .btn.active:hover {
+  z-index: 1;
+}
+#containerIcons .btn {
+  border-color: #cccccc;
+  transition: transform 300ms, border-color 300ms;
+}
+#containerIcons .btn.active {
+  border-color: #555555;
+  transform: translate(0, -3px);
+}
+#containerIcons .btn img {
+  width: 20px;
+  height: 20px;
+}
+.btn {
+  cursor: pointer;
+}
+.btn-no-outline .btn.focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 .flex > input,
 .flex > button {
@@ -26,6 +65,9 @@ body {
   color: #555555;
   background-color: #ffffff;
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+.flex-right {
+  justify-content: right;
 }
 .tile-group {
   font-size: 0;
@@ -42,6 +84,7 @@ body {
   overflow: hidden;
   cursor: pointer;
   color: white;
+  transition: background-color 300ms;
 }
 .tile-group .tile .content {
   text-align: center;

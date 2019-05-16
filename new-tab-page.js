@@ -1,12 +1,107 @@
 var colors = {
-  "blue": "#37adff",
-  "turquoise": "#00c79a",
-  "green": "#51cd00",
-  "yellow": "#ffcb00",
-  "orange": "#ff9f00",
-  "red": "#ff613d",
-  "pink": "#ff4bda",
-  "purple": "#af51f5"
+  blue: "#37adff",
+  turquoise: "#00c79a",
+  green: "#51cd00",
+  yellow: "#ffcb00",
+  orange: "#ff9f00",
+  red: "#ff613d",
+  pink: "#ff4bda",
+  purple: "#af51f5",
+}
+
+var icons = {
+  fingerprint: "resource://usercontext-content/fingerprint.svg",
+  briefcase: "resource://usercontext-content/briefcase.svg",
+  dollar: "resource://usercontext-content/dollar.svg",
+  cart: "resource://usercontext-content/cart.svg",
+  vacation: "resource://usercontext-content/vacation.svg",
+  gift: "resource://usercontext-content/gift.svg",
+  food: "resource://usercontext-content/food.svg",
+  fruit: "resource://usercontext-content/fruit.svg",
+  pet: "resource://usercontext-content/pet.svg",
+  tree: "resource://usercontext-content/tree.svg",
+  chill: "resource://usercontext-content/chill.svg",
+  circle: "resource://usercontext-content/circle.svg",
+}
+
+var mode = 'open';
+
+function isOpenMode() {
+  return isMode('openMode');
+}
+
+function isEditMode() {
+  return isMode('editMode');
+}
+
+function isMode(mode) {
+  return $('#mode .btn.active input').attr('id') === mode;
+}
+
+function initModal() {
+  const $colors = $('#containerColors');
+  const $btnColorTemplate = $('<label class="btn btn-sm" />');
+  const $btnColorInputTemplate = $('<input type="radio" name="containerColor" autocomplete="off" />');
+  $btnColorTemplate.append($btnColorInputTemplate);
+  for (const color in colors) {
+    const $btnColor = $btnColorTemplate.clone();
+    const $btnColorInput = $btnColor.find('input');
+    const $btnColorSpan = $('<span>');
+    $btnColor.css('background-color', colors[color]);
+    $btnColor.attr('data-color', color);
+    $btnColorSpan.html(' '+ color.charAt(0).toUpperCase() + color.slice(1));
+    $btnColor.append($btnColorInput);
+    $btnColor.append($btnColorSpan);
+    $colors.append($btnColor);
+  }
+
+  const $icons = $('#containerIcons');
+  const $btnIconTemplate = $('<label class="btn btn-sm" />');
+  const $btnIconInputTemplate = $('<input type="radio" name="containerIcon" autocomplete="off" />');
+  $btnIconTemplate.append($btnIconInputTemplate);
+  for (const icon in icons) {
+    const $btnIcon = $btnIconTemplate.clone();
+    const $btnIconInput = $btnIcon.find('input');
+    const $btnIconImg = $('<img>');
+    $btnIcon.attr('data-icon', icon);
+    $btnIconImg.attr('src', icons[icon]);
+    $btnIcon.append($btnIconInput);
+    $btnIcon.append($btnIconImg);
+    $icons.append($btnIcon);
+  }
+}
+
+function openModal(event) {
+  const $tile = $(event.relatedTarget);
+  $('#containerIdentity').val($tile.data('identity'));
+  $('#containerName').val($tile.data('name'));
+  $('#containerColors .btn').removeClass('active');
+  $('#containerColors').find('[data-color="'+$tile.data('color')+'"]').addClass('active');
+  $('#containerIcons .btn').removeClass('active');
+  $('#containerIcons').find('[data-icon="'+$tile.data('icon')+'"]').addClass('active');
+}
+
+function editContainerFromModal(event) {
+  const name = $('#containerName').val();
+  const identity = $('#containerIdentity').val();
+  const color = $('#containerColors .active').data('color');
+  const icon = $('#containerIcons .active').data('icon');
+  browser.contextualIdentities.update(identity, {
+    name: name,
+    color: color,
+    icon: icon,
+  });
+  event.preventDefault();
+
+  $('#editContainerModal').modal('hide');
+
+  const $tile = $('[data-identity="'+identity+'"]');
+  $tile.data('name', name);
+  $tile.data('color', color);
+  $tile.data('icon', icon);
+  $tile.find('.title').html(name);
+  $tile.css('background-color', colors[color]);
+  $tile.find('.icon img').attr('src', icons[icon]);
 }
 
 function eventHandler(event) {
@@ -14,21 +109,28 @@ function eventHandler(event) {
   if (target.className !== "tile") {
     target = target.closest('.tile');
   }
-  browser.tabs.getCurrent().then((tabInfo) => {
-    browser.tabs.create({
-      url: 'about:blank',
-      cookieStoreId: target.dataset.identity
+  if (isOpenMode()) {
+    browser.tabs.getCurrent().then((tabInfo) => {
+      browser.tabs.create({
+        url: 'about:blank',
+        cookieStoreId: target.dataset.identity
+      });
+      browser.tabs.remove(tabInfo.id);
+    }, () => {
+      console.log('error');
     });
-    browser.tabs.remove(tabInfo.id);
-  }, () => {
-    console.log('error');
-  });
-  event.preventDefault();
+    event.preventDefault();
+    event.stopPropagation();
+  }
 }
 
 function attachAction(tile, identity) {
   tile.dataset.identity = identity.cookieStoreId;
   tile.dataset.name = identity.name;
+  tile.dataset.color = identity.color;
+  tile.dataset.icon = identity.icon;
+  tile.dataset.toggle = "modal";
+  tile.dataset.target = "#editContainerModal";
   tile.addEventListener('click', eventHandler);
 }
 
@@ -110,7 +212,6 @@ search.addEventListener('keyup', function(event) {
   }
   let elements = document.getElementsByClassName('tile');
   for (let elem of elements) {
-    console.log(elem.style);
     let name = elem.dataset.name;
     if (search.length === 0 || (name && name.toLowerCase().trim().includes(value))) {
       elem.style.display = null;
@@ -119,4 +220,14 @@ search.addEventListener('keyup', function(event) {
     }
   }
 });
+
 document.getElementById('searchBtn', performSearch);
+
+$(function() {
+  initModal();
+  $('#editContainerModal').on('show.bs.modal', openModal);
+  $('#editContainerModal form').on('submit', editContainerFromModal);
+  $('#saveContainer').on('click', function() {
+    $('#editContainerModal form').submit();
+  });
+});

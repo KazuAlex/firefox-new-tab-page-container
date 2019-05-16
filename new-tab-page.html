@@ -3,6 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/bootstrap-4.3.1-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="new-tab-page.css" />
   </head>
 
@@ -11,9 +12,65 @@
       <input id="search" type="text" placeholder="Search" />
     </div>
     <div class="flex">
+      <div id="mode" class="flex flex-right">
+        <div class="btn-group btn-group-toggle btn-no-outline" data-toggle="buttons">
+          <label class="btn btn-secondary active">
+            <input type="radio" name="modes" id="openMode" autocomplete="off" checked> Open
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="modes" id="editMode" autocomplete="off"> Edit
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="flex">
       <div id="tile-group" class="tile-group">
       </div>
     </div>
+
+    <div class="modal fade" id="editContainerModal" tabindex="-1" role="dialog" aria-labelledby="editContainerModalTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editContainerModalTitle">Edit container</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div> <!-- .modal-header -->
+            <div class="modal-body">
+              <form>
+                <input type="hidden" id="containerIdentity" value="" />
+                <div class="form-group">
+                  <label for="containerName" class="col-form-label">Name</label>
+                  <input type="text" class="form-control" id="containerName" />
+                </div>
+                <div class="form-group">
+                  <label for="containerColors" class="col-form-label">Color</label>
+                  <div>
+                    <div class="btn-group btn-group-toggle btn-no-outline" id="containerColors" data-toggle="buttons">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="containerIcons" class="col-form-label">Icon</label>
+                  <div>
+                    <div class="btn-group btn-group-toggle btn-no-outline" id="containerIcons" data-toggle="buttons">
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div> <!-- .model-body -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="saveContainer">Send message</button>
+            </div> <!-- .modal-footer -->
+        </div> <!-- .modal-content -->
+      </div> <!-- .modal-dialog -->
+    </div> <!--.modal.fade#editContainer -->
+
+    <script src="assets/jquery-3.3.1-slim/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"></script>
+    <script src="assets/popper.js/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"></script>
+    <script src="assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
     <script src="new-tab-page.js"></script>
   </body>
 </html>
