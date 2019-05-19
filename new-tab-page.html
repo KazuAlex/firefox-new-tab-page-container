@@ -5,34 +5,41 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="assets/bootstrap-4.3.1-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="new-tab-page.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
   </head>
 
   <body>
     <div class="flex search">
       <input id="search" type="text" placeholder="Search" />
-    </div>
+    </div> <!-- .flex.search -->
     <div class="flex">
-      <div id="mode" class="flex flex-right">
+      <div class="flex flex-space-between" id="mode">
+        <div class="btn-no-outline">
+          <button class="btn btn-primary" id="createIdentity">
+            <i class="fas fa-plus"></i>
+            New
+          </button> <!-- .btn.btn-primary#createIdentity -->
+        </div> <!-- .btn-no-outline -->
         <div class="btn-group btn-group-toggle btn-no-outline" data-toggle="buttons">
           <label class="btn btn-light active">
             <input type="radio" name="modes" id="openMode" autocomplete="off" checked> Open
-          </label>
+          </label> <!-- .btn.btn-light.active -->
           <label class="btn btn-light">
             <input type="radio" name="modes" id="editMode" autocomplete="off"> Edit
-          </label>
-        </div>
-      </div>
-    </div>
+          </label> <!-- .btn.btn-light -->
+        </div> <!-- .btn-group.btn-group-toggle.btn-no-outline -->
+      </div> <!-- .flex.flex-space-between#mode -->
+    </div> <!-- .flex -->
     <div class="flex">
-      <div id="tile-group" class="tile-group">
-      </div>
-    </div>
+      <div class="tile-group" id="tile-group">
+      </div> <!-- .tile-group#tile-group -->
+    </div> <!-- .flex -->
 
-    <div class="modal fade" id="editContainerModal" tabindex="-1" role="dialog" aria-labelledby="editContainerModalTitle" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+    <div class="modal fade" id="containerModal" tabindex="-1" role="dialog" aria-labelledby="containerModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="editContainerModalTitle">Edit container</h5>
+              <h5 class="modal-title" id="containerModalTitle">Edit identity</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -61,12 +68,44 @@
               </form>
             </div> <!-- .model-body -->
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="saveContainer">Send message</button>
+              <div>
+                <button type="button" class="btn btn-danger" id="deleteContainer" data-dismiss="modal">Delete</button>
+              </div>
+              <div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveContainer">Save</button>
+              </div>
             </div> <!-- .modal-footer -->
         </div> <!-- .modal-content -->
-      </div> <!-- .modal-dialog -->
-    </div> <!--.modal.fade#editContainer -->
+      </div> <!-- .modal-dialog.modal-dialog-scrollable.modal-dialog-centered -->
+    </div> <!--.modal.fade#containerModal -->
+
+    <div class="modal fade" id="deleteContainerModal" tabindex="-1" role="dialog" aria-labelledby="deleteContainerModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="deleteContainerModalTitle">Confirm identity deletion</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div> <!-- .modal-header -->
+            <div class="modal-body">
+              <form>
+                <input type="hidden" id="deleteContainerIdentity" value="" />
+                Are you sure you want to delete identity ?
+              </form>
+            </div> <!-- .model-body -->
+            <div class="modal-footer">
+              <div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+              <div>
+                <button type="button" class="btn btn-danger" id="confirmIdentityDelete">Delete</button>
+              </div>
+            </div> <!-- .modal-footer -->
+        </div> <!-- .modal-content -->
+      </div> <!-- .modal-dialog.modal-dialog-scrollable.modal-dialog-centered -->
+    </div> <!--.modal.fade#deleteContainerModal -->
 
     <script src="assets/jquery-3.3.1-slim/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"></script>
     <script src="assets/popper.js/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"></script>

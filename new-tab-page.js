@@ -71,37 +71,102 @@ function initModal() {
   }
 }
 
-function openModal(event) {
-  const $tile = $(event.relatedTarget);
-  $('#containerIdentity').val($tile.data('identity'));
-  $('#containerName').val($tile.data('name'));
-  $('#containerColors .btn').removeClass('active');
-  $('#containerColors').find('[data-color="'+$tile.data('color')+'"]').addClass('active');
-  $('#containerIcons .btn').removeClass('active');
-  $('#containerIcons').find('[data-icon="'+$tile.data('icon')+'"]').addClass('active');
+function createIdentityModal() {
+  identityModal('Create new identity', null);
+  
+  $('#containerModal').modal('show');
 }
 
-function editContainerFromModal(event) {
-  const name = $('#containerName').val();
+function identityModal(title, identity) {
+  $('#containerModalTitle').html(title);
+  $('#containerIdentity').val(identity ? identity.cookie : '');
+  $('#containerName').val(identity ? identity.name : 'New identity');
+  $('#containerColors .btn').removeClass('active');
+  $('#containerIcons .btn').removeClass('active');
+  $('#deleteContainer').prop('disabled', true);
+  if (identity) {
+    $('#containerColors').find('[data-color="'+identity.color+'"]').addClass('active');
+    $('#containerIcons').find('[data-icon="'+identity.icon+'"]').addClass('active');
+    $('#deleteContainer').prop('disabled', false);
+  } else {
+    $('#containerColors').find('[data-color="blue"]').addClass('active');
+    $('#containerIcons').find('[data-icon="circle"]').addClass('active');
+  }
+}
+
+function editIdentityModal(event) {
+  const $tile = $(event.relatedTarget);
+  if ($tile.data('identity')) {
+    identity = {
+      cookie: $tile.data('identity'),
+      name: $tile.data('name'),
+      color: $tile.data('color'),
+      icon: $tile.data('icon'),
+    }
+    identityModal('Edit identity', identity);
+  }
+}
+
+function submitContainerFromModal(event) {
   const identity = $('#containerIdentity').val();
-  const color = $('#containerColors .active').data('color');
-  const icon = $('#containerIcons .active').data('icon');
-  browser.contextualIdentities.update(identity, {
-    name: name,
-    color: color,
-    icon: icon,
-  });
+  let name = $('#containerName').val();
+  name = name ? name : 'New identity';
+  let color = $('#containerColors .active').data('color');
+  color = color ? color : colors.blue;
+  let icon = $('#containerIcons .active').data('icon');
+  icon = icon ? icon : icon.circle;
+
+  if (identity) {
+    browser.contextualIdentities.update(identity, {
+      name: name,
+      color: color,
+      icon: icon,
+    });
+
+    const $tile = $('[data-identity="'+identity+'"]');
+    $tile.data('name', name);
+    $tile.data('color', color);
+    $tile.data('icon', icon);
+    $tile.find('.title').html(name);
+    $tile.css('background-color', colors[color]);
+    $tile.find('.icon img').attr('src', icons[icon]);
+  } else {
+    data = {};
+    if (name) {
+      data.name = name;
+      data.color = color;
+      data.icon = icon;
+    }
+    browser.contextualIdentities
+      .create(data)
+      .then((identity) => {
+        let tile = createTile(identity);
+        divTiles.appendChild(tile);
+      });
+  }
+  $('#containerModal').modal('hide');
   event.preventDefault();
+}
 
-  $('#editContainerModal').modal('hide');
+function openDeleteIdentityFromModal() {
+}
 
-  const $tile = $('[data-identity="'+identity+'"]');
-  $tile.data('name', name);
-  $tile.data('color', color);
-  $tile.data('icon', icon);
-  $tile.find('.title').html(name);
-  $tile.css('background-color', colors[color]);
-  $tile.find('.icon img').attr('src', icons[icon]);
+function deleteIdentityFromModal() {
+  const identity = $('#containerIdentity').val();
+
+  $('#deleteContainerIdentity').val(identity);
+  $('#containerModal').one('hidden.bs.modal', function() {
+    $('#deleteContainerModal').modal('show');
+  });
+  $('#containerModal').modal('hide');
+}
+
+function confirmDeleteIdentity() {
+  const identity = $('#containerIdentity').val();
+  browser.contextualIdentities.remove(identity).then(() => {
+    $('#deleteContainerModal').modal('hide');
+    $('.tile[data-identity="'+identity+'"]').remove();
+  });
 }
 
 function eventHandler(event) {
@@ -130,7 +195,7 @@ function attachAction(tile, identity) {
   tile.dataset.color = identity.color;
   tile.dataset.icon = identity.icon;
   tile.dataset.toggle = "modal";
-  tile.dataset.target = "#editContainerModal";
+  tile.dataset.target = "#containerModal";
   tile.addEventListener('click', eventHandler);
 }
 
@@ -158,28 +223,29 @@ function createTile(identity) {
   content.appendChild(title);
   tile.appendChild(content);
 
+  tile.style = `background-color: ${colors[identity.color]}`;
+
   attachAction(tile, identity);
 
   return tile;
 }
 
-var div = document.getElementById('tile-group');
+var divTiles = document.getElementById('tile-group');
 
 if (browser.contextualIdentities === undefined) {
-  div.innerText = 'browser.contextualIdentities not available. Check that the privacy.userContext.enabled pref is set to true, and reload the add-on.';
+  divTiles.innerText = 'browser.contextualIdentities not available. Check that the privacy.userContext.enabled pref is set to true, and reload the add-on.';
 } else {
   browser.contextualIdentities.query({})
   .then((identities) => {
     identitiesLength = identities.length;
     if (!identities.length) {
-      div.innerText = 'No identities returned from the API.';
+      divTiles.innerText = 'No identities returned from the API.';
       return;
     }
 
     for (let identity of identities) {
       let tile = createTile(identity);
-      tile.style = `background-color: ${colors[identity.color]}`;
-      div.appendChild(tile);
+      divTiles.appendChild(tile);
     }
 
     window.addEventListener('resize', updateWidth);
@@ -191,7 +257,7 @@ var identitiesLength = 0;
 
 var updateWidth = () => {
   let nbElem = Math.floor((document.documentElement.clientWidth - 40) / 254);
-  div.style.width = (nbElem * 254) + 'px';
+  divTiles.style.width = (nbElem * 254) + 'px';
 }
 
 var search = document.getElementById('search');
@@ -225,9 +291,12 @@ document.getElementById('searchBtn', performSearch);
 
 $(function() {
   initModal();
-  $('#editContainerModal').on('show.bs.modal', openModal);
-  $('#editContainerModal form').on('submit', editContainerFromModal);
+  $('#containerModal').on('show.bs.modal', editIdentityModal);
+  $('#containerModal form').on('submit', submitContainerFromModal);
   $('#saveContainer').on('click', function() {
-    $('#editContainerModal form').submit();
+    $('#containerModal form').submit();
   });
+  $('#createIdentity').on('click', createIdentityModal);
+  $('#deleteContainer').on('click', deleteIdentityFromModal);
+  $('#confirmIdentityDelete').on('click', confirmDeleteIdentity);
 });

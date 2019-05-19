@@ -17,6 +17,10 @@ body {
 #mode {
   width: 90vw;
 }
+#deleteContainerModal .modal-footer,
+#containerModal .modal-footer {
+  justify-content: space-between;
+}
 #containerColors .btn {
   color: #ffffff;
   transition: transform 300ms, border-color 300ms;
@@ -66,8 +70,8 @@ body {
   background-color: #ffffff;
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
 }
-.flex-right {
-  justify-content: right;
+.flex-space-between {
+  justify-content: space-between;
 }
 .tile-group {
   font-size: 0;
