@@ -9,7 +9,7 @@ body {
 .search {
   position: sticky;
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   background-color: #ffffff;
   top: 0;
   z-index: 2;
@@ -56,16 +56,17 @@ body {
   outline: none !important;
   box-shadow: none !important;
 }
-.flex > input,
-.flex > button {
+.search > div > input,
+.search > div > button {
   height: 35px;
   font-size: 18px;
   border-radius: 5px;
 }
-.flex > input {
+.search > div > input {
   width: 90vw;
   border: 1px solid #cccccc;
   padding: 6px 12px;
+  margin-bottom: 10px;
   color: #555555;
   background-color: #ffffff;
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075);

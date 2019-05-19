@@ -10,26 +10,26 @@
 
   <body>
     <div class="flex search">
-      <input id="search" type="text" placeholder="Search" />
+      <div>
+        <input id="search" type="text" placeholder="Search" />
+        <div class="flex flex-space-between" id="mode">
+          <div class="btn-no-outline">
+            <button class="btn btn-primary" id="createIdentity">
+              <i class="fas fa-plus"></i>
+              New
+            </button> <!-- .btn.btn-primary#createIdentity -->
+          </div> <!-- .btn-no-outline -->
+          <div class="btn-group btn-group-toggle btn-no-outline" data-toggle="buttons">
+            <label class="btn btn-light active">
+              <input type="radio" name="modes" id="openMode" autocomplete="off" checked> Open
+            </label> <!-- .btn.btn-light.active -->
+            <label class="btn btn-light">
+              <input type="radio" name="modes" id="editMode" autocomplete="off"> Edit
+            </label> <!-- .btn.btn-light -->
+          </div> <!-- .btn-group.btn-group-toggle.btn-no-outline -->
+        </div> <!-- .flex.flex-space-between#mode -->
+      </div>
     </div> <!-- .flex.search -->
-    <div class="flex">
-      <div class="flex flex-space-between" id="mode">
-        <div class="btn-no-outline">
-          <button class="btn btn-primary" id="createIdentity">
-            <i class="fas fa-plus"></i>
-            New
-          </button> <!-- .btn.btn-primary#createIdentity -->
-        </div> <!-- .btn-no-outline -->
-        <div class="btn-group btn-group-toggle btn-no-outline" data-toggle="buttons">
-          <label class="btn btn-light active">
-            <input type="radio" name="modes" id="openMode" autocomplete="off" checked> Open
-          </label> <!-- .btn.btn-light.active -->
-          <label class="btn btn-light">
-            <input type="radio" name="modes" id="editMode" autocomplete="off"> Edit
-          </label> <!-- .btn.btn-light -->
-        </div> <!-- .btn-group.btn-group-toggle.btn-no-outline -->
-      </div> <!-- .flex.flex-space-between#mode -->
-    </div> <!-- .flex -->
     <div class="flex">
       <div class="tile-group" id="tile-group">
       </div> <!-- .tile-group#tile-group -->
