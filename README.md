@@ -14,3 +14,4 @@ Obviously, this extension required [Firefox Multi-Account Containers](https://ad
 - [x] Edit contextual identities
 - [x] Create contextual identity
 - [x] Delete contextual identity
+- [ ] Open new tab in default identity
