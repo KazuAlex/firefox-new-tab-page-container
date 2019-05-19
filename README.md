@@ -12,5 +12,5 @@ Obviously, this extension required [Firefox Multi-Account Containers](https://ad
 ## Next steps
 - [x] Show contextual identities
 - [x] Edit contextual identities
-- [ ] Create contextual identity
-- [ ] Delete contextual identity
+- [x] Create contextual identity
+- [x] Delete contextual identity
