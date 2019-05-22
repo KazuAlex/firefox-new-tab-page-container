@@ -177,7 +177,6 @@ function eventHandler(event) {
   if (isOpenMode()) {
     browser.tabs.getCurrent().then((tabInfo) => {
       browser.tabs.create({
-        url: 'about:blank',
         cookieStoreId: target.dataset.identity
       });
       browser.tabs.remove(tabInfo.id);
