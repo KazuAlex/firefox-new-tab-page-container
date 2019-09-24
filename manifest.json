@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "New Tab Page Container",
-  "version": "1.5",
- 
+  "version": "1.9",
+
   "description": "Show contextual identities on new tab page",
 
   "icons": {
@@ -10,7 +10,7 @@
     "64": "icons/new-tab-64.png",
     "128": "icons/new-tab-128.png"
   },
-  
+
   "browser_action": {
     "default_icon": "icons/new-tab-32.png",
     "default_title": "New Tab Page Container"
@@ -21,12 +21,18 @@
     "cookies",
     "tabs"
   ],
- 
+
   "content_scripts": [
     {
       "matches": ["<all_urls>", "*://*/*"]
     }
   ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "64.0"
+    }
+  },
 
   "chrome_url_overrides" : {
     "newtab": "new-tab-page.html"

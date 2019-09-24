@@ -73,7 +73,7 @@ function initModal() {
 
 function createIdentityModal() {
   identityModal('Create new identity', null);
-  
+
   $('#containerModal').modal('show');
 }
 
