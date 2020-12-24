@@ -7,6 +7,7 @@ var colors = {
   red: "#ff613d",
   pink: "#ff4bda",
   purple: "#af51f5",
+  toolbar: "#000000",
 }
 
 var icons = {
@@ -22,6 +23,7 @@ var icons = {
   tree: "resource://usercontext-content/tree.svg",
   chill: "resource://usercontext-content/chill.svg",
   circle: "resource://usercontext-content/circle.svg",
+  fence: "resource://usercontext-content/fence.svg",
 }
 
 var mode = 'open';
@@ -40,16 +42,21 @@ function isMode(mode) {
 
 function initModal() {
   $colors = document.querySelector('#containerColors');
-  const $btnColorTemplate = $('<label class="btn btn-sm" />');
-  const $btnColorInputTemplate = $('<input type="radio" name="containerColor" autocomplete="off" />');
+  const $btnColorTemplate = document.createElement('label');
+  $btnColorTemplate.classList.add('btn');
+  $btnColorTemplate.classList.add('btn-sm');
+  const $btnColorInputTemplate = document.createElement('input');
+  $btnColorInputTemplate.type = 'radio';
+  $btnColorInputTemplate.name = 'containerColor';
+  $btnColorInputTemplate.autocomplete = 'off';
   $btnColorTemplate.append($btnColorInputTemplate);
   for (const color in colors) {
-    const $btnColor = $btnColorTemplate.clone();
-    const $btnColorInput = $btnColor.find('input');
-    const $btnColorSpan = $('<span>');
-    $btnColor.css('background-color', colors[color]);
-    $btnColor.attr('data-color', color);
-    $btnColorSpan.html(' '+ color.charAt(0).toUpperCase() + color.slice(1));
+    const $btnColor = $btnColorTemplate.cloneNode();
+    const $btnColorInput = $btnColorInputTemplate.cloneNode();
+    const $btnColorSpan = document.createElement('span');
+    $btnColor.style['background-color'] = colors[color];
+    $btnColor.setAttribute('data-color', color);
+    $btnColorSpan.innerHTML = ' '+ color.charAt(0).toUpperCase() + color.slice(1);
     $btnColor.append($btnColorInput);
     $btnColor.append($btnColorSpan);
     $colors.append($btnColor);
