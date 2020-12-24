@@ -177,7 +177,7 @@ function eventHandler(event) {
   if (isOpenMode()) {
     browser.tabs.getCurrent().then((tabInfo) => {
       browser.tabs.create({
-        cookieStoreId: target.dataset.identity
+        cookieStoreId: target.dataset.identity, index: (tabInfo.index+1)
       });
       browser.tabs.remove(tabInfo.id);
     }, () => {

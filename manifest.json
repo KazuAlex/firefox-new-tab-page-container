@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "New Tab Page Container",
-  "version": "1.10",
+  "version": "1.10.1",
 
   "description": "Show contextual identities on new tab page",
 
