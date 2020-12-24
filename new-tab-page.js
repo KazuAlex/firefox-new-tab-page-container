@@ -35,11 +35,11 @@ function isEditMode() {
 }
 
 function isMode(mode) {
-  return $('#mode .btn.active input').attr('id') === mode;
+  return document.querySelector('#mode .btn.active input').getAttribute('id') === mode;
 }
 
 function initModal() {
-  const $colors = $('#containerColors');
+  $colors = document.querySelector('#containerColors');
   const $btnColorTemplate = $('<label class="btn btn-sm" />');
   const $btnColorInputTemplate = $('<input type="radio" name="containerColor" autocomplete="off" />');
   $btnColorTemplate.append($btnColorInputTemplate);

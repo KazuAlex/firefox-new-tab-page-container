@@ -1,19 +1,48 @@
 {
   "manifest_version": 2,
   "name": "New Tab Page Container",
-  "version": "1.9",
+  "version": "1.10",
 
   "description": "Show contextual identities on new tab page",
 
   "icons": {
-    "32": "icons/new-tab-32.png",
-    "64": "icons/new-tab-64.png",
-    "128": "icons/new-tab-128.png"
+    "16": "/icons/new-tab.svg",
+    "32": "/icons/new-tab.svg",
+    "64": "/icons/new-tab.svg",
+    "96": "/icons/new-tab.svg",
+    "128": "/icons/new-tab.svg"
   },
 
   "browser_action": {
-    "default_icon": "icons/new-tab-32.png",
-    "default_title": "New Tab Page Container"
+    "default_title": "New Tab Page Container",
+    "default_icon": "/icons/new-tab.svg",
+    "theme_icons": [
+      {
+        "light": "/icons/new-tab-light.svg",
+        "dark": "/icons/new-tab.svg",
+        "size": 16
+      },
+      {
+        "light": "/icons/new-tab-light.svg",
+        "dark": "/icons/new-tab.svg",
+        "size": 32
+      },
+      {
+        "light": "/icons/new-tab-light.svg",
+        "dark": "/icons/new-tab.svg",
+        "size": 64
+      },
+      {
+        "light": "/icons/new-tab-light.svg",
+        "dark": "/icons/new-tab.svg",
+        "size": 96
+      },
+      {
+        "light": "/icons/new-tab-light.svg",
+        "dark": "/icons/new-tab.svg",
+        "size": 128
+      }
+    ]
   },
 
   "permissions": [

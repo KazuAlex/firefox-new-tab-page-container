@@ -6,6 +6,12 @@
     <link rel="stylesheet" href="assets/bootstrap-4.3.1-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="new-tab-page.css" />
     <link rel="stylesheet" href="assets/font-awesome-5.11.2/css/all.min.css" />
+
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="icons/new-tab-light.svg">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="icons/new-tab-light.svg">
+    <link rel="icon" type="image/svg+xml" sizes="64x64" href="icons/new-tab-light.svg">
+    <link rel="icon" type="image/svg+xml" sizes="96x96" href="icons/new-tab-light.svg">
+    <link rel="icon" type="image/svg+xml" sizes="128x128" href="icons/new-tab-light.svg">
   </head>
 
   <body>
@@ -19,14 +25,16 @@
               New
             </button> <!-- .btn.btn-primary#createIdentity -->
           </div> <!-- .btn-no-outline -->
-          <div class="btn-group btn-group-toggle btn-no-outline" data-toggle="buttons">
-            <label class="btn btn-light active">
-              <input type="radio" name="modes" id="openMode" autocomplete="off" checked> Open
-            </label> <!-- .btn.btn-light.active -->
-            <label class="btn btn-light">
-              <input type="radio" name="modes" id="editMode" autocomplete="off"> Edit
-            </label> <!-- .btn.btn-light -->
-          </div> <!-- .btn-group.btn-group-toggle.btn-no-outline -->
+          <div class="flex-right">
+            <div class="btn-group btn-group-toggle btn-no-outline" data-toggle="buttons">
+              <label class="btn btn-light active">
+                <input type="radio" name="modes" id="openMode" autocomplete="off" checked> Open
+              </label> <!-- .btn.btn-light.active -->
+              <label class="btn btn-light">
+                <input type="radio" name="modes" id="editMode" autocomplete="off"> Edit
+              </label> <!-- .btn.btn-light -->
+            </div> <!-- .btn-group.btn-group-toggle.btn-no-outline -->
+          </div> <!-- .flex-right -->
         </div> <!-- .flex.flex-space-between#mode -->
       </div>
     </div> <!-- .flex.search -->
