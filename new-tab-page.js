@@ -26,283 +26,448 @@ var icons = {
   fence: "resource://usercontext-content/fence.svg",
 }
 
-var mode = 'open';
+var tilePadding = 0;
+var identityTiles = null;
+var tileTemplate = null;
+var editModal = null;
+var confirmeDeleteModal = null;
+var editModalOpened = false;
+var keyboardActivated = false;
+var selectedIdentity = null;
 
-function isOpenMode() {
-  return isMode('openMode');
-}
+var keyBindings = {};
 
-function isEditMode() {
-  return isMode('editMode');
-}
-
-function isMode(mode) {
-  return document.querySelector('#mode .btn.active input').getAttribute('id') === mode;
-}
-
-function initModal() {
-  $colors = document.querySelector('#containerColors');
-  const $btnColorTemplate = document.createElement('label');
-  $btnColorTemplate.classList.add('btn');
-  $btnColorTemplate.classList.add('btn-sm');
-  const $btnColorInputTemplate = document.createElement('input');
-  $btnColorInputTemplate.type = 'radio';
-  $btnColorInputTemplate.name = 'containerColor';
-  $btnColorInputTemplate.autocomplete = 'off';
-  $btnColorTemplate.append($btnColorInputTemplate);
-  for (const color in colors) {
-    const $btnColor = $btnColorTemplate.cloneNode();
-    const $btnColorInput = $btnColorInputTemplate.cloneNode();
-    const $btnColorSpan = document.createElement('span');
-    $btnColor.style['background-color'] = colors[color];
-    $btnColor.setAttribute('data-color', color);
-    $btnColorSpan.innerHTML = ' '+ color.charAt(0).toUpperCase() + color.slice(1);
-    $btnColor.append($btnColorInput);
-    $btnColor.append($btnColorSpan);
-    $colors.append($btnColor);
+// tile's click handler
+function tileClickHandler(event) {
+  let target = event.target;
+  if (!target.classList.contains('identity-tile')) {
+    target = target.closest('.identity-tile');
   }
 
-  const $icons = $('#containerIcons');
-  const $btnIconTemplate = $('<label class="btn btn-sm" />');
-  const $btnIconInputTemplate = $('<input type="radio" name="containerIcon" autocomplete="off" />');
-  $btnIconTemplate.append($btnIconInputTemplate);
-  for (const icon in icons) {
-    const $btnIcon = $btnIconTemplate.clone();
-    const $btnIconInput = $btnIcon.find('input');
-    const $btnIconImg = $('<img>');
-    $btnIcon.attr('data-icon', icon);
-    $btnIconImg.attr('src', icons[icon]);
-    $btnIcon.append($btnIconInput);
-    $btnIcon.append($btnIconImg);
-    $icons.append($btnIcon);
-  }
-}
+  if (!target.classList.contains('identity-tile')) return;
 
-function createIdentityModal() {
-  identityModal('Create new identity', null);
-
-  $('#containerModal').modal('show');
-}
-
-function identityModal(title, identity) {
-  $('#containerModalTitle').html(title);
-  $('#containerIdentity').val(identity ? identity.cookie : '');
-  $('#containerName').val(identity ? identity.name : 'New identity');
-  $('#containerColors .btn').removeClass('active');
-  $('#containerIcons .btn').removeClass('active');
-  $('#deleteContainer').prop('disabled', true);
-  if (identity) {
-    $('#containerColors').find('[data-color="'+identity.color+'"]').addClass('active');
-    $('#containerIcons').find('[data-icon="'+identity.icon+'"]').addClass('active');
-    $('#deleteContainer').prop('disabled', false);
-  } else {
-    $('#containerColors').find('[data-color="blue"]').addClass('active');
-    $('#containerIcons').find('[data-icon="circle"]').addClass('active');
-  }
-}
-
-function editIdentityModal(event) {
-  const $tile = $(event.relatedTarget);
-  if ($tile.data('identity')) {
-    identity = {
-      cookie: $tile.data('identity'),
-      name: $tile.data('name'),
-      color: $tile.data('color'),
-      icon: $tile.data('icon'),
-    }
-    identityModal('Edit identity', identity);
-  }
-}
-
-function submitContainerFromModal(event) {
-  const identity = $('#containerIdentity').val();
-  let name = $('#containerName').val();
-  name = name ? name : 'New identity';
-  let color = $('#containerColors .active').data('color');
-  color = color ? color : colors.blue;
-  let icon = $('#containerIcons .active').data('icon');
-  icon = icon ? icon : icon.circle;
-
-  if (identity) {
-    browser.contextualIdentities.update(identity, {
-      name: name,
-      color: color,
-      icon: icon,
+  browser.tabs.getCurrent().then((tabInfo) => {
+    browser.tabs.create({
+      cookieStoreId: target.dataset.cookieStoreId,
+      index: tabInfo.index+1,
     });
+    browser.tabs.remove(tabInfo.id);
+  }, () => console.error('Cannot change contextual identity for current tab'));
 
-    const $tile = $('[data-identity="'+identity+'"]');
-    $tile.data('name', name);
-    $tile.data('color', color);
-    $tile.data('icon', icon);
-    $tile.find('.title').html(name);
-    $tile.css('background-color', colors[color]);
-    $tile.find('.icon img').attr('src', icons[icon]);
-  } else {
-    data = {};
-    if (name) {
-      data.name = name;
-      data.color = color;
-      data.icon = icon;
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+// tile's hover handler
+function tileHoverHandler(event) {
+  let target = event.target;
+  if (!target.classList.contains('identity-tile')) {
+    target = target.closest('.identity-tile');
+  }
+
+  if (!target.classList.contains('identity-tile')) return;
+
+  let editNode = target.querySelector('.edit');
+  let badgeNode = target.querySelector('.badge');
+
+  let top, right, left, isHover, padding;
+
+  if (editNode && editNode.classList.contains('edit')) {
+    top = getComputedStyle(target).paddingTop;
+    right = getComputedStyle(target).paddingRight;
+
+    if (!top || !right) return;
+
+    isHover = target.matches(':hover');
+
+    padding = 10 + (target.matches(':hover') ? 0 : tilePadding);
+    editNode.style.top = padding + 'px';
+    editNode.style.right = padding + 'px';
+  }
+
+  if (badgeNode && badgeNode.classList.contains('badge')) {
+    top = getComputedStyle(target).paddingTop;
+    left = getComputedStyle(target).paddingLeft;
+
+    if (!top || !left) return;
+
+    isHover = target.matches(':hover');
+
+    padding = 10 + (target.matches(':hover') ? 0 : tilePadding);
+    badgeNode.style.top = padding + 'px';
+    badgeNode.style.left = padding + 'px';
+  }
+}
+
+// tile's edit button handler
+function tileEditHandler(event) {
+  let target = event.target;
+  if (!target.classList.contains('identity-tile')) {
+    target = target.closest('.identity-tile');
+  }
+
+  if (!target.classList.contains('identity-tile')) return;
+
+  selectedIdentity = {
+    cookieStoreId: target.dataset.cookieStoreId,
+    name: target.dataset.name,
+  };
+  initModalWithIdentity({
+    cookieStoreId: target.dataset.cookieStoreId,
+    name: target.dataset.name,
+    color: target.dataset.color,
+    icon: target.dataset.icon,
+  });
+  editModal.show();
+
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+// function to set modal with identity
+function initModalWithIdentity(identity) {
+  if (null !== identity) {
+    for (const color of document.querySelectorAll('.select-color label')) {
+      color.classList.remove('active');
     }
+    if (document.querySelector(`.select-color label[data-color=${identity.color}]`)) {
+      document
+        .querySelector(`.select-color label[data-color=${identity.color}]`)
+        .classList.add('active');
+    }
+    for (const icon of document.querySelectorAll('.select-icon label')) {
+      icon.classList.remove('active');
+    }
+    if (document.querySelector(`.select-icon label[data-icon=${identity.icon}]`)) {
+      document
+        .querySelector(`.select-icon label[data-icon=${identity.icon}]`)
+        .classList.add('active');
+    }
+
+    document.querySelector('#identityName').value = identity.name;
+
+    document.querySelector('#modalDelete').removeAttribute('disabled');
+  } else {
+    for (const color of document.querySelectorAll('.select-color label')) {
+      color.classList.remove('active');
+    }
+    for (const icon of document.querySelectorAll('.select-icon label')) {
+      icon.classList.remove('active');
+    }
+    document.querySelector('#identityName').value = 'New identity';
+  }
+}
+
+// function to create tile
+function createTile(identity) {
+  if (null === tileTemplate.content.querySelector('.identity-tile')) {
+    return null;
+  }
+  let node = tileTemplate.content.querySelector('.identity-tile').cloneNode(true);
+  if (node.querySelector('.icon')) {
+    node.querySelector('.icon').setAttribute('src', identity.iconUrl);
+  }
+  if (node.querySelector('.name')) {
+    node.querySelector('.name').innerText = identity.name;
+  }
+  if (node.querySelector('.centered')) {
+    node.querySelector('.centered').style.backgroundColor = identity.colorCode;
+  }
+  node.setAttribute('data-identity', identity.cookieStoreId);
+
+  node.dataset.cookieStoreId = identity.cookieStoreId;
+  node.dataset.name = identity.name;
+  node.dataset.color = identity.color;
+  node.dataset.colorCode = identity.colorCode;
+  node.dataset.icon = identity.icon;
+  node.dataset.iconUrl = identity.iconUrl;
+
+  node.addEventListener('click', tileClickHandler);
+
+  if (identity.cookieStoreId) {
+    // can edit only identities
+    node.addEventListener('mouseover', tileHoverHandler);
+    node.addEventListener('mouseout', tileHoverHandler);
+
+    node.querySelector('.edit').addEventListener('click', tileEditHandler);
+  } else {
+    // cannot edit "no contextual identity" identity
+    node.querySelector('.edit').remove();
+  }
+  return node;
+}
+
+// function to update tile height to be squared
+function updateTileHeight(tile) {
+  if (null === tile || undefined === tile) {
+    identityTiles.childNodes.forEach(element => {
+      if ('TEMPLATE' === element.tagName || undefined === element.tagName)
+        return;
+      updateTileHeight(element);
+    });
+    return;
+  };
+  tilePadding = getComputedStyle(tile).paddingLeft;
+
+  if (!tilePadding) return;
+
+  tilePadding = parseInt(tilePadding.substring(0, tilePadding.length - 2));
+
+  tile.style.paddingTop = tilePadding + 'px';
+  tile.style.paddingBottom = tilePadding + 'px';
+  tile.style.height = tile.offsetWidth + 'px';
+}
+
+function updateIdentity(identity) {
+  let tile = identityTiles
+    .querySelector(`[data-identity=${identity.cookieStoreId}]`);
+  if (tile) {
+    tile.dataset.name = identity.name;
+    tile.dataset.color = identity.color;
+    tile.dataset.colorCode = colors[identity.color];
+    tile.dataset.icon = identity.icon;
+    tile.dataset.iconUrl = icons[identity.icon];
+    tile.querySelector('.name').innerHTML = identity.name;
+    tile.querySelector('.centered').style.backgroundColor = colors[identity.color];
+    tile.querySelector('.icon').setAttribute('src', icons[identity.icon]);
+  }
+}
+
+function saveIdentityFromModal() {
+  let name = document.querySelector('#identityName').value;
+  let color = document
+    .querySelector('.select-color label.active')
+    .getAttribute('data-color');
+  let icon = document
+    .querySelector('.select-icon label.active')
+    .getAttribute('data-icon');
+  if (selectedIdentity) {
     browser.contextualIdentities
-      .create(data)
-      .then((identity) => {
-        let tile = createTile(identity);
-        divTiles.appendChild(tile);
+      .update(selectedIdentity.cookieStoreId, {
+        name: name,
+        color: color,
+        icon: icon
+      }).then((identity) => {
+        updateIdentity(identity);
+        resetKeyBindings();
+      });
+      selectedIdentity = null;
+  } else {
+    browser.contextualIdentities
+      .create({
+        name: name,
+        color: color,
+        icon: icon
+      }).then((identity) => {
+        identityTiles.appendChild(createTile(identity));
+        updateTileHeight();
+        resetKeyBindings();
+        let tile = identityTiles
+          .querySelector(`[data-identity='']`);
+        identityTiles.appendChild(tile);
       });
   }
-  $('#containerModal').modal('hide');
-  event.preventDefault();
+
+  editModal.hide();
 }
 
-function openDeleteIdentityFromModal() {
+function cancelIdentityFromModal() {
+  editModal.hide();
 }
 
 function deleteIdentityFromModal() {
-  const identity = $('#containerIdentity').val();
-
-  $('#deleteContainerIdentity').val(identity);
-  $('#containerModal').one('hidden.bs.modal', function() {
-    $('#deleteContainerModal').modal('show');
-  });
-  $('#containerModal').modal('hide');
+  editModal.hide();
+  document
+    .querySelector('#confirmDeleteModal .identity-to-del')
+    .innerHTML = selectedIdentity.name;
+  console.log('pouet', confirmDeleteModal);
+  confirmDeleteModal.show();
 }
 
-function confirmDeleteIdentity() {
-  const identity = $('#containerIdentity').val();
-  browser.contextualIdentities.remove(identity).then(() => {
-    $('#deleteContainerModal').modal('hide');
-    $('.tile[data-identity="'+identity+'"]').remove();
+function confirmDeleteModalCancel() {
+  confirmDeleteModal.hide();
+  editModal.show();
+}
+
+function confirmDeleteModalConfirm() {
+  browser.contextualIdentities.remove(selectedIdentity.cookieStoreId).then(() => {
+    let tile = identityTiles
+      .querySelector(`[data-identity=${selectedIdentity.cookieStoreId}]`);
+      tile.remove();
+    confirmDeleteModal.hide();
   });
 }
 
-function eventHandler(event) {
-  let target = event.target;
-  if (target.className !== "tile") {
-    target = target.closest('.tile');
-  }
-  if (isOpenMode()) {
-    browser.tabs.getCurrent().then((tabInfo) => {
-      browser.tabs.create({
-        cookieStoreId: target.dataset.identity, index: (tabInfo.index+1)
-      });
-      browser.tabs.remove(tabInfo.id);
-    }, () => {
-      console.log('error');
+function resetKeyBindings() {
+  keyBindings = {};
+  const tiles = identityTiles.querySelectorAll(`[data-identity]`);
+  if (!tiles) return;
+  keys = [];
+  for (const tile of tiles) {
+    let name = tile.getAttribute('data-name');
+    let identity = tile.getAttribute('data-identity');
+    if (!name) return;
+    name = name.toLowerCase();
+    keys.push({
+      identity,
+      name,
+      tile,
     });
-    event.preventDefault();
-    event.stopPropagation();
+  }
+  keys.sort((a, b) => {
+    if (a.name.toLowerCase()[0] < b.name.toLowerCase()[0])
+      return 1;
+    if (a.name.toLowerCase()[0] > b.name.toLowerCase()[0])
+      return -1;
+    return 0;
+  });
+  for (const tile of keys) {
+    let name = tile.name.toLowerCase();
+    for (const c of name) {
+      if (!keyBindings.hasOwnProperty(c)) {
+        let badge = tile.tile.querySelector('.badge');
+        if (!badge) break;
+        keyBindings[c] = tile.tile;
+        badge.innerText = c;
+        break;
+      }
+    }
   }
 }
 
-function attachAction(tile, identity) {
-  tile.dataset.identity = identity.cookieStoreId;
-  tile.dataset.name = identity.name;
-  tile.dataset.color = identity.color;
-  tile.dataset.icon = identity.icon;
-  tile.dataset.toggle = "modal";
-  tile.dataset.target = "#containerModal";
-  tile.addEventListener('click', eventHandler);
-}
-
-function createTile(identity) {
-  let tile = document.createElement('div');
-  tile.className = "tile";
-
-  let content = document.createElement('div');
-  content.className = "content";
-
-  let icon = document.createElement('div');
-  icon.className = "icon";
-
-  let img = document.createElement('img');
-  img.src = identity.iconUrl;
-
-  icon.appendChild(img);
-
-  content.appendChild(icon);
-
-  let title = document.createElement('div');
-  title.className = "title";
-  title.appendChild(document.createTextNode(identity.name));
-
-  content.appendChild(title);
-  tile.appendChild(content);
-
-  tile.style = `background-color: ${colors[identity.color]}`;
-
-  attachAction(tile, identity);
-
-  return tile;
-}
-
-var divTiles = document.getElementById('tile-group');
-
-if (browser.contextualIdentities === undefined) {
-  divTiles.innerText = 'browser.contextualIdentities not available. Check that the privacy.userContext.enabled pref is set to true, and reload the add-on.';
-} else {
-  browser.contextualIdentities.query({})
-  .then((identities) => {
-    identitiesLength = identities.length;
-    if (!identities.length) {
-      divTiles.innerText = 'No identities returned from the API.';
-      return;
-    }
-
-    for (let identity of identities) {
-      let tile = createTile(identity);
-      divTiles.appendChild(tile);
-    }
-
-    window.addEventListener('resize', updateWidth);
-    updateWidth();
-  });
-}
-
-var identitiesLength = 0;
-
-var updateWidth = () => {
-  let nbElem = Math.floor((document.documentElement.clientWidth - 40) / 254);
-  divTiles.style.width = (nbElem * 254) + 'px';
-}
-
-var search = document.getElementById('search');
-
-var performSearch = function() {
-  let searchVal = search.value;
-  browser.tabs.getCurrent().then((tabInfo) => {
-    browser.search.search({
-      query: searchVal,
-      tabId: tabInfo.id,
-    });
-  });
-}
-search.addEventListener('keyup', function(event) {
-  let value = search.value;
-  if (value) {
-    value = value.toLowerCase().trim();
+function toggleKeyboard(activate = null) {
+  if (null === activate) {
+    keyboardActivated = !keyboardActivated;
+  } else {
+    keyboardActivated = !!activate;
   }
-  let elements = document.getElementsByClassName('tile');
-  for (let elem of elements) {
-    let name = elem.dataset.name;
-    if (search.length === 0 || (name && name.toLowerCase().trim().includes(value))) {
-      elem.style.display = null;
+
+  const badges = identityTiles.querySelectorAll('.badge');
+  for (const badge of badges) {
+    if (keyboardActivated) {
+      badge.classList.add('visible');
     } else {
-      elem.style.display = 'none';
+      badge.classList.remove('visible');
     }
   }
-});
+}
 
-document.getElementById('searchBtn', performSearch);
+// on page load, create tiles
+window.addEventListener('load', init);
 
-$(function() {
-  initModal();
-  $('#containerModal').on('show.bs.modal', editIdentityModal);
-  $('#containerModal form').on('submit', submitContainerFromModal);
-  $('#saveContainer').on('click', function() {
-    $('#containerModal form').submit();
-  });
-  $('#createIdentity').on('click', createIdentityModal);
-  $('#deleteContainer').on('click', deleteIdentityFromModal);
-  $('#confirmIdentityDelete').on('click', confirmDeleteIdentity);
-});
+function init() {
+  if (browser.contextualIdentities === undefined) {
+    identityTiles.innerText = 'ContextualIdentities not available. '+
+      'Check that the privacy.userContext.enabled pref is set to true, and reload the add-on.';
+  } else {
+    identityTiles = document.querySelector('#identityTiles');
+    tileTemplate = document.querySelector('#tileTemplate');
+    editModal = new bootstrap.Modal(document.querySelector('#editModal'));
+    confirmDeleteModal = new bootstrap.Modal(document.querySelector('#confirmDeleteModal'));
+
+    document
+      .querySelector('#modalSave')
+      .addEventListener('click', saveIdentityFromModal);
+    document
+      .querySelector('#modalCancel')
+      .addEventListener('click', cancelIdentityFromModal);
+    document
+      .querySelector('#modalDelete')
+      .addEventListener('click', deleteIdentityFromModal);
+
+    document
+      .querySelector('#deleteModalCancel')
+      .addEventListener('click', confirmDeleteModalCancel);
+    document
+      .querySelector('#deleteModalConfirm')
+      .addEventListener('click', confirmDeleteModalConfirm);
+
+    document
+      .querySelector('#addIdentity')
+      .addEventListener('click', () => {
+        initModalWithIdentity(null);
+
+        editModal.show();
+      });
+
+    console.log(editModal._element);
+    const editModalEl = editModal._element;
+    const confirmDeleteModalEl = confirmDeleteModal._element;
+
+    editModalEl.addEventListener('show.bs.modal', () => {
+      editModalOpened = true;
+    });
+    editModalEl.addEventListener('hide.bs.modal', () => {
+      editModalOpened = false;
+    });
+
+    confirmDeleteModalEl.addEventListener('show.bs.modal', () => {
+      editModalOpened = true;
+    });
+    confirmDeleteModalEl.addEventListener('hide.bs.modal', () => {
+      editModalOpened = false;
+    });
+
+    document.addEventListener('keyup', (event) => {
+      if (editModalOpened || !event.key) return;
+
+      let key = event.key.toLowerCase();
+
+      if (!keyboardActivated && 'f' === event.key) {
+        toggleKeyboard();
+        //keyboardActivated = true;
+        //return;
+      } else if (
+        keyboardActivated
+        && ('Escape' === event.key || 'Backspace' === event.key)
+      ) {
+        toggleKeyboard(false);
+      } else if (keyboardActivated) {
+        if (keyBindings.hasOwnProperty(event.key)) {
+          keyBindings[event.key].click();
+        }
+      }
+    });
+
+    browser.contextualIdentities.query({})
+      .then((identities) => {
+        if (!identities.length) {
+          identityTiles.innerText = 'No identities returned from the API.';
+          return;
+        }
+
+        for (let identity of identities) {
+          let node = createTile(identity);
+          identityTiles.appendChild(node);
+        }
+        identityTiles.appendChild(createTile({
+          cookieStoreId: '',
+          iconUrl: icons.circle,
+          colorCode: '#a2a2a2',
+          name: 'Without identitiy',
+        }));
+
+        setTimeout(() => {
+          updateTileHeight();
+          resetKeyBindings();
+        }, 200);
+      });
+
+    for (const color of document.querySelectorAll('.select-color label')) {
+      color.addEventListener('click', () => {
+        for (const colorLabel of document.querySelectorAll('.select-color label.active')) {
+          colorLabel.classList.remove('active');
+        }
+        color.classList.add('active');
+      });
+    }
+    for (const icon of document.querySelectorAll('.select-icon label')) {
+      icon.addEventListener('click', () => {
+        for (const iconLabel of document.querySelectorAll('.select-icon label.active')) {
+          iconLabel.classList.remove('active');
+        }
+        icon.classList.add('active');
+      });
+    }
+  }
+}

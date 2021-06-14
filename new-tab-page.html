@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="assets/bootstrap-4.3.1-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="new-tab-page.css" />
 
     <link rel="icon" type="image/svg+xml" sizes="16x16" href="icons/new-tab-light.svg">
@@ -11,112 +11,523 @@
     <link rel="icon" type="image/svg+xml" sizes="64x64" href="icons/new-tab-light.svg">
     <link rel="icon" type="image/svg+xml" sizes="96x96" href="icons/new-tab-light.svg">
     <link rel="icon" type="image/svg+xml" sizes="128x128" href="icons/new-tab-light.svg">
+
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="new-tab-page.js"></script>
   </head>
 
   <body>
-    <div class="flex search">
-      <div>
-        <input id="search" type="text" placeholder="Search" />
-        <div class="flex flex-space-between" id="mode">
-          <div class="btn-no-outline">
-            <button class="btn btn-primary" id="createIdentity">
-              <i class="fas fa-plus"></i>
-              New
-            </button> <!-- .btn.btn-primary#createIdentity -->
-          </div> <!-- .btn-no-outline -->
-          <div class="flex-right">
-            <div class="btn-group btn-group-toggle btn-no-outline" data-toggle="buttons">
-              <label class="btn btn-light active">
-                <input type="radio" name="modes" id="openMode" autocomplete="off" checked> Open
-              </label> <!-- .btn.btn-light.active -->
-              <label class="btn btn-light">
-                <input type="radio" name="modes" id="editMode" autocomplete="off"> Edit
-              </label> <!-- .btn.btn-light -->
-            </div> <!-- .btn-group.btn-group-toggle.btn-no-outline -->
-          </div> <!-- .flex-right -->
-        </div> <!-- .flex.flex-space-between#mode -->
-      </div>
-    </div> <!-- .flex.search -->
-    <div class="flex">
-      <div class="tile-group" id="tile-group">
-      </div> <!-- .tile-group#tile-group -->
-    </div> <!-- .flex -->
+    <div class="container-fluid">
+      <div id="identityTiles" class="row">
+        <template id="tileTemplate">
+          <div class="col-2 identity-tile" data-identity="">
+            <span class="badge bg-light text-dark"></span>
 
-    <div class="modal fade" id="containerModal" tabindex="-1" role="dialog" aria-labelledby="containerModalTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+            <button
+              type="button"
+              class="edit btn btn-link"
+            >
+              <img src="icons/edit.svg" />
+            </button> <!-- .edit -->
+
+            <div class="centered">
+              <img class="icon"/>
+              <span class="name"></span>
+            </div> <!-- .centered -->
+          </div> <!-- .identity-tile -->
+        </template>
+      </div> <!-- #identity-tiles .row -->
+    </div> <!-- .container-fluid -->
+
+    <!-- floating button to create new container -->
+    <div class="floating-button">
+      <button
+        type="button"
+        id="addIdentity"
+        class="btn btn-secondary rounded-circle shadow"
+      >
+        <img src="icons/add.svg" />
+      </button>
+    </div>
+
+    <!-- edit modal -->
+    <div id="editModal" class="modal">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="containerModalTitle">Edit identity</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div> <!-- .modal-header -->
-            <div class="modal-body">
+            <h5 class="modal-title" id="exampleModalToggleLabel">Identity</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
               <form>
-                <input type="hidden" id="containerIdentity" value="" />
-                <div class="form-group">
-                  <label for="containerName" class="col-form-label">Name</label>
-                  <input type="text" class="form-control" id="containerName" />
+                <div class="row">
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="identityName" class="form-label">Name</label>
+                      <input
+                        id="identityName"
+                        type="text"
+                        class="form-control"
+                        placeholder="Identity name"
+                      />
+                    </div> <!-- .form-floating -->
+                  </div> <!-- .col -->
+                </div> <!-- .row -->
+                <!-- Color selection -->
+                <div class="row">
+                  <div class="col-12">
+                    <label class="form-label">Color</label>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="containerColors" class="col-form-label">Color</label>
-                  <div>
-                    <div class="btn-group btn-group-toggle btn-no-outline" id="containerColors" data-toggle="buttons">
+                <div class="row mb-3">
+                  <div class="col-12 select-color">
+                    <div class="btn-group" role="group">
+                      <input
+                        type="radio"
+                        id="color-blue"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="blue"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-blue"
+                        style="background-color: #37adff;"
+                        data-color="blue"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="color-turquoise"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="turquoise"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-turquoise"
+                        style="background-color: #00c79a;"
+                        data-color="turquoise"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="color-green"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="green"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-green"
+                        style="background-color: #51cd00;"
+                        data-color="green"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="color-yellow"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="yellow"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-yellow"
+                        style="background-color: #ffcb00;"
+                        data-color="yellow"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="color-orange"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="orange"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-orange"
+                        style="background-color: #ff9f00;"
+                        data-color="orange"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="color-red"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="red"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-red"
+                        style="background-color: #ff613d;"
+                        data-color="red"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="color-pink"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="pink"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-pink"
+                        style="background-color: #ff4bda;"
+                        data-color="pink"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="color-purple"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="purple"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-purple"
+                        style="background-color: #af51f5;"
+                        data-color="purple"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="color-toolbar"
+                        name="select-color"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-color="toolbar"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="color-toolbar"
+                        style="background-color: #000000;"
+                        data-color="toolbar"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="containerIcons" class="col-form-label">Icon</label>
-                  <div>
-                    <div class="btn-group btn-group-toggle btn-no-outline" id="containerIcons" data-toggle="buttons">
-                    </div>
+                <!-- Icon selection -->
+                <div class="row">
+                  <div class="col-12">
+                    <label class="form-label">Icon</label>
                   </div>
                 </div>
-              </form>
-            </div> <!-- .model-body -->
-            <div class="modal-footer">
-              <div>
-                <button type="button" class="btn btn-danger" id="deleteContainer" data-dismiss="modal">Delete</button>
-              </div>
-              <div>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="saveContainer">Save</button>
-              </div>
-            </div> <!-- .modal-footer -->
-        </div> <!-- .modal-content -->
-      </div> <!-- .modal-dialog.modal-dialog-scrollable.modal-dialog-centered -->
-    </div> <!--.modal.fade#containerModal -->
+                <div class="row">
+                  <div class="col-12 select-icon">
+                    <div class="btn-group" role="group">
+                      <input
+                        type="radio"
+                        id="icon-fingerprint"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="fingerprint"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-fingerprint"
+                        data-icon="fingerprint"
+                      >
+                        <img src="resource://usercontext-content/fingerprint.svg" />
+                      </label>
 
-    <div class="modal fade" id="deleteContainerModal" tabindex="-1" role="dialog" aria-labelledby="deleteContainerModalTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+                      <input
+                        type="radio"
+                        id="icon-briefcase"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="briefcase"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-briefcase"
+                        data-icon="briefcase"
+                      >
+                        <img src="resource://usercontext-content/briefcase.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-dollar"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="dollar"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-dollar"
+                        data-icon="dollar"
+                      >
+                        <img src="resource://usercontext-content/dollar.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-cart"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="cart"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-cart"
+                        data-icon="cart"
+                      >
+                        <img src="resource://usercontext-content/cart.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-vacation"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="vacation"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-vacation"
+                        data-icon="vacation"
+                      >
+                        <img src="resource://usercontext-content/vacation.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-gift"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="gift"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-gift"
+                        data-icon="gift"
+                      >
+                        <img src="resource://usercontext-content/gift.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-food"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="food"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-food"
+                        data-icon="food"
+                      >
+                        <img src="resource://usercontext-content/food.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-fruit"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="fruit"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-fruit"
+                        data-icon="fruit"
+                      >
+                        <img src="resource://usercontext-content/fruit.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-pet"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="pet"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-pet"
+                        data-icon="pet"
+                      >
+                        <img src="resource://usercontext-content/pet.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-tree"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="tree"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-tree"
+                        data-icon="tree"
+                      >
+                        <img src="resource://usercontext-content/tree.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-chill"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="chill"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-chill"
+                        data-icon="chill"
+                      >
+                        <img src="resource://usercontext-content/chill.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-circle"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="circle"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-circle"
+                        data-icon="circle"
+                      >
+                        <img src="resource://usercontext-content/circle.svg" />
+                      </label>
+
+                      <input
+                        type="radio"
+                        id="icon-fence"
+                        name="select-icon"
+                        class="btn-check"
+                        autocomplete="off"
+                        data-icon="fence"
+                      />
+                      <label
+                        class="btn btn-outline-light"
+                        for="icon-fence"
+                        data-icon="fence"
+                      >
+                        <img src="resource://usercontext-content/fence.svg" />
+                      </label>
+                    </div>
+                  </div>
+                </div> <!-- .col -->
+              </form>
+            </div> <!-- .container-fluid -->
+          </div>
+          <div class="modal-footer">
+            <div>
+              <button
+                type="button"
+                id="modalDelete"
+                class="btn btn-danger"
+              >
+                Delete
+              </button>
+            </div>
+            <div>
+              <button
+                type="button"
+                id="modalCancel"
+                class="btn btn-light"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                id="modalSave"
+                class="btn btn-success"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div> <!-- .modal-dialog .modal-dialog-centered .modal-dialog-scrollable -->
+    </div> <!-- #editModal .modal -->
+
+    <!-- confirm delete modal -->
+    <div id="confirmDeleteModal" class="modal">
+      <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="deleteContainerModalTitle">Confirm identity deletion</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+            <h5 class="modal-title" id="exampleModalToggleLabel">Confirm identity deletion</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            You will delete
+            <strong class="identity-to-del"></strong>
+            <br />
+            Are you sure ?
+          </div>
+          <div class="modal-footer">
+            <div>
+              <button
+                type="button"
+                id="deleteModalCancel"
+                class="btn btn-light"
+              >
+                Cancel
               </button>
-            </div> <!-- .modal-header -->
-            <div class="modal-body">
-              <form>
-                <input type="hidden" id="deleteContainerIdentity" value="" />
-                Are you sure you want to delete identity ?
-              </form>
-            </div> <!-- .model-body -->
-            <div class="modal-footer">
-              <div>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
-              <div>
-                <button type="button" class="btn btn-danger" id="confirmIdentityDelete">Delete</button>
-              </div>
-            </div> <!-- .modal-footer -->
-        </div> <!-- .modal-content -->
-      </div> <!-- .modal-dialog.modal-dialog-scrollable.modal-dialog-centered -->
-    </div> <!--.modal.fade#deleteContainerModal -->
+            </div>
+            <div>
+              <button
+                type="button"
+                id="deleteModalConfirm"
+                class="btn btn-success"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      </div> <!-- .modal-dialog .modal-dialog-centered .modal-dialog-scrollable -->
+    </div> <!-- #confirmDeleteModal .modal -->
 
-    <script src="assets/jquery-3.4.1/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="></script>
-    <script src="assets/popper.js/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"></script>
-    <script src="assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
-    <script src="new-tab-page.js"></script>
   </body>
 </html>

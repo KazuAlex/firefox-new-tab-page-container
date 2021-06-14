@@ -2,108 +2,123 @@ body {
   font-family: sans-serif;
   margin: 0;
 }
-.flex {
-  display: flex;
-  justify-content: center;
-}
-.search {
-  position: sticky;
-  padding-top: 20px;
-  padding-bottom: 10px;
-  background-color: #ffffff;
-  top: 0;
-  z-index: 2;
-}
-#mode {
-  width: 90vw;
-}
-#deleteContainerModal .modal-footer,
-#containerModal .modal-footer {
-  justify-content: space-between;
-}
-#containerColors .btn {
+
+.identity-tile {
+  position: relative;
   color: #ffffff;
-  transition: transform 300ms, border-color 300ms;
-}
-#containerColors .btn.active {
-  border-color: #555555;
-  transform: translate(0, -3px);
-}
-#containerColors .btn:hover,
-#containerIcons .btn:hover {
-  z-index: 0;
-}
-#containerColors .btn.active:hover,
-#containerIcons .btn.active:hover {
-  z-index: 1;
-}
-#containerIcons .btn {
-  border-color: #cccccc;
-  transition: transform 300ms, border-color 300ms;
-}
-#containerIcons .btn.active {
-  border-color: #555555;
-  transform: translate(0, -3px);
-}
-#containerIcons .btn img {
-  width: 20px;
-  height: 20px;
-}
-.btn {
   cursor: pointer;
-}
-.btn-no-outline .btn.focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-.search > div > input,
-.search > div > button {
-  height: 35px;
-  font-size: 18px;
-  border-radius: 5px;
-}
-.search > div > input {
-  width: 90vw;
-  border: 1px solid #cccccc;
-  padding: 6px 12px;
-  margin-bottom: 10px;
-  color: #555555;
-  background-color: #ffffff;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-}
-.flex-space-between {
-  justify-content: space-between;
-}
-.tile-group {
-  font-size: 0;
-  margin: 10px 0;
-}
-.tile-group .tile {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 250px;
-  height: 250px;
-  margin: 2px;
   font-size: 20px;
-  overflow: hidden;
-  cursor: pointer;
-  color: white;
-  transition: background-color 300ms;
+
+  transition: padding 0.3s ease,
+              padding-left 0.3s ease,
+              padding-top 0.3s ease,
+              padding-right 0.3s ease,
+              padding-bottom 0.3s ease;
 }
-.tile-group .tile .content {
-  text-align: center;
-  user-select: none;
+
+.identity-tile:hover {
+  padding: 0!important;
+  padding-left: 0!important;
+  padding-top: 0!important;
+  padding-right: 0!important;
+  padding-bottom: 0!important;
 }
-.tile-group .tile .content .icon {
-  font-size: 2.5em;
+
+.identity-tile > .centered {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.tile-group .tile .content .icon img {
+
+.identity-tile .icon {
   filter: invert(1);
 }
-.tile-group .tile .content .title {
-  position: relative;
-  font-size: 1.2em;
-  opacity: 1;
-  letter-spacing: 2px;
+
+.identity-tile .edit {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  transition: top 0.3s ease,
+              right 0.3s ease;
+}
+
+.identity-tile .badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  visibility: hidden;
+
+  transition: top 0.3s ease,
+              left 0.3s ease;
+}
+
+.identity-tile .badge.visible {
+  visibility: visible;
+}
+
+#editModal .select-icon label {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#editModal .select-icon img {
+  flex-grow: 1;
+  max-width: 25px;
+}
+
+#editModal .select-icon label.active {
+  border-width: 1px;
+  border-color: #000000;
+}
+
+#editModal .select-color img {
+  flex-grow: 1;
+  max-width: 20px;
+  filter: invert(1);
+}
+
+#editModal .select-color label {
+  border-width: 0;
+  box-shadow: none;
+}
+
+#editModal .select-color label.active {
+  border-width: 1px;
+  border-color: #000000;
+}
+
+#editModal .modal-footer,
+#confirmDeleteModal .modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.floating-button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  margin: 10px;
+}
+
+.floating-button button {
+  padding: 12px;
+  width: 49px;
+  height: 49px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-button button img {
+  filter: invert(1);
 }
