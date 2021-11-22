@@ -1,0 +1,64 @@
+{
+  "manifest_version": 2,
+  "name": "New Tab Page Identities",
+  "version": "3.0.0",
+
+  "description": "Show contextual identities on new tab page",
+
+  "icons": {
+    "16": "/assets/icons/new-tab.svg",
+    "32": "/assets/icons/new-tab.svg",
+    "64": "/assets/icons/new-tab.svg",
+    "96": "/assets/icons/new-tab.svg",
+    "128": "/assets/icons/new-tab.svg"
+  },
+
+  "browser_action": {
+    "default_title": "New Tab Page Identities",
+    "default_icon": "/assets/icons/new-tab.svg",
+    "theme_icons": [
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 16
+      },
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 32
+      },
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 64
+      },
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 96
+      },
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 128
+      }
+    ]
+  },
+
+  "permissions": [
+    "contextualIdentities",
+    "cookies",
+    "tabs",
+    "storage"
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "64.0"
+    }
+  },
+
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  }
+}
