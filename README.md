@@ -8,3 +8,9 @@ This extension recommended [Firefox Multi-Account Containers](https://addons.moz
 
 ## Download add-on
 [Firefox Add-ons page](https://addons.mozilla.org/fr/firefox/addon/new-tab-page-container/)
+
+## Development / contribution
+
+This project use [vitejs framework](https://vitejs.dev/)  
+To compile, use `yarn build`. Enjoy `dist/` folder
+To build in dev mode use `yarn build:dev`.
