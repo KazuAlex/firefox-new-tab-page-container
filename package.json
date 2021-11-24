@@ -1,6 +1,17 @@
 {
   "name": "firefox-new-tab-page-container-vite",
   "version": "3.0.1",
+  "description": "Change identity and manage it from new tab",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KazuAlex/firefox-new-tab-page-container.git"
+  },
+  "author": "KazuAlex",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/KazuAlex/firefox-new-tab-page-container/issues"
+  },
+  "homepage": "https://github.com/KazuAlex/firefox-new-tab-page-container#readme",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
