@@ -8,9 +8,10 @@
   --green: #21a339;
   --grey: #6e6e6e;
   --background-color: #ebebeb;
-  --background-color-secondary: #ccd1d7;
+  --border-color: #ccd1d7;
   --text-color: #141414;
   --text-color-reverse: #fbfbfb;
+  --text-color-button: #fbfbfb;
   --box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
                 0px 6px 10px 0px rgba(0, 0, 0, 0.14),
                 0px 1px 18px 0px rgba(0, 0, 0, .12);
@@ -18,13 +19,14 @@
 
 body.dark {
   --blue: #8ab6e9;
-  --red: #df6668;
-  --green: #94ce9c;
-  --grey: #8a8a8a;
-  --background-color: #2e2e2e;
-  --background-color-secondary: #404244;
+  --red: #f05454;
+  --green: #519872;
+  --grey: #2b2a33;
+  --background-color: #1c1b22;
+  --border-color: #7c7b82;
   --text-color: #fbfbfb;
   --text-color-reverse: #141414;
+  --text-color-button: #fbfbfb;
   --box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
                 0px 6px 10px 0px rgba(0, 0, 0, 0.14),
                 0px 1px 18px 0px rgba(0, 0, 0, .12);
@@ -229,6 +231,8 @@ body {
   max-height: calc(100% - 3.5rem);
   margin: 1.75rem auto;
 
+  overflow: hidden;
+
   background-color: var(--background-color);
   border-radius: .3rem;
 
@@ -241,7 +245,8 @@ body {
   }
 
   &__header {
-    border-bottom: 1px solid var(--background-color-secondary);
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--background-color);
 
     .default {
       display: flex;
@@ -292,10 +297,12 @@ body {
 
   &__body {
     overflow-y: auto;
+    background-color: var(--background-color);
   }
 
   &__footer {
-    border-top: 1px solid var(--background-color-secondary);
+    border-top: 1px solid var(--border-color);
+    background-color: var(--background-color);
 
     .default {
       display: flex;;
@@ -316,7 +323,7 @@ body {
         border-radius: .25rem;
 
         cursor: pointer;
-        color: var(--text-color-reverse);
+        color: var(--text-color-button);
       }
 
       .modal__delete {
@@ -353,13 +360,12 @@ body {
       color: var(--text-color);
       background-color: var(--background-color);
       background-clip: padding-box;
-      border: 1px solid var(--background-color-secondary);
+      border: 1px solid var(--border-color);
       appearance: none;
       border-radius: .25rem;
 
       &:focus {
         color: var(--text-color);
-        background-color: var(--background-color);
         border-color: #86b7fe;
         outline: 0;
         box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
