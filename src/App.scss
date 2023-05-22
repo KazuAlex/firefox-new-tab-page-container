@@ -1,0 +1,80 @@
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .drawer-open-icon {
+    position: fixed;
+    left: -20px;
+    justify-content: flex-end;
+
+    &:hover {
+      left: -5px;
+      justify-content: center;
+      transition: left 200ms, justify-content 200ms;
+    }
+  }
+
+  .IdentityList {
+    .identities {
+      .identity-container {
+        & > div {
+          margin: 5px;
+          border-radius: 20px;
+          transition: margin .05s, box-shadow .05s;
+        }
+
+        &:hover {
+          & > div {
+            margin: 0 10px 10px 0;
+            box-shadow: var(--tile-shadow);
+          }
+        }
+      }
+
+      .identity-tile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &.no-identity {
+          background-color: var(--identity-tile-default-color);
+        }
+      }
+    }
+  }
+
+  .Settings, .ManageContainers {
+    margin-top: -32px;
+
+    .Header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      font-weight: 500;
+      font-size: 1.25rem;
+      line-height: 1.6;
+
+      h1 {
+        font-weight: 500;
+        font-size: 1.5rem;
+        line-height: 1.6;
+      }
+
+      .go-back-button {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+.RegExpHelp {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

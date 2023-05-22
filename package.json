@@ -1,0 +1,51 @@
+{
+  "name": "firefox-new-tab-containers-react",
+  "version": "4.0.0",
+  "description": "Change identity and manage it from new tab",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KazuAlex/firefox-new-tab-page-container.git"
+  },
+  "author": "KazuAlex",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/KazuAlex/firefox-new-tab-page-container/issues"
+  },
+  "homepage": "https://github.com/KazuAlex/firefox-new-tab-page-container#readme",
+  "scripts": {
+    "build": "tsc && vite build",
+    "build:watch": " tsc && vite build --watch --mode development",
+    "preview": "vite preview",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "5.0.0-alpha.129",
+    "@mui/material": "^5.12.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zustand": "^4.3.7"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.37",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.41.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "rollup-plugin-visualizer": "^5.9.0",
+    "sass": "^1.62.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5",
+    "web-ext-types": "^3.2.1"
+  }
+}

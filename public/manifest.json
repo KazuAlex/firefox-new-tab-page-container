@@ -1,0 +1,61 @@
+{
+  "manifest_version": 2,
+  "name": "New tab containers",
+  "version": "4.0.0",
+  "description": "Show contextual identities on new tab page",
+  "homepage_url": "https://github.com/KazuAlex/firefox-new-tab-page-container",
+
+  "browser_action": {
+    "default_title": "Containers page",
+    "default_icon": "/assets/icons/new-tab.svg",
+    "theme_icons": [
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 16
+      },
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 32
+      },
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 64
+      },
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 96
+      },
+      {
+        "light": "/assets/icons/new-tab-light.svg",
+        "dark": "/assets/icons/new-tab.svg",
+        "size": 128
+      }
+    ]
+  },
+
+  "icons": {
+    "48": "/assets/icons/new-tab.svg",
+    "96": "/assets/icons/new-tab.svg"
+  },
+
+  "permissions": [
+    "contextualIdentities",
+    "cookies",
+    "tabs",
+    "storage"
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "64.0"
+    }
+  },
+
+  "chrome_url_overrides" : {
+    "newtab": "index.html"
+  }
+}
