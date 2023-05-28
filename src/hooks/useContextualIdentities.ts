@@ -2,11 +2,16 @@ import { useMemo, useState } from 'react';
 import { ContextualIdentity } from '@/types/contextual-identities';
 import { BrowserTab } from '@/types/browser';
 import useSettingsStore from '@/stores/useSettingsStore';
+import { shallow } from 'zustand/shallow';
+import SortOrder from '@/types/sort-order';
 
 function useContextualIdentities() {
   const [identities, setIdentities] = useState<ContextualIdentity[]>([]);
 
-  const ignoredContainers = useSettingsStore((state) => state.ignoredContainers);
+  const [ignoredContainers, sortOrder] = useSettingsStore(
+    (state) => [state.ignoredContainers, state.sortOrder],
+    shallow,
+  );
 
   browser.contextualIdentities.query({})
     .then((contextualIdentities: unknown) => {
@@ -18,8 +23,31 @@ function useContextualIdentities() {
       .split(',')
       .map((element: string) => element.trim())
       .map((element: string) => new RegExp(element, 'i'));
-    return identities.filter((identity) => !ignored.some((regexp) => regexp.test(identity.name)));
-  }, [identities, ignoredContainers]);
+
+    return identities
+      .filter((identity) => !ignored.some((regexp) => regexp.test(identity.name)))
+      .sort((a, b) => {
+        if (sortOrder !== SortOrder.Default) {
+          const aName = a.name.toLowerCase();
+          const bName = b.name.toLowerCase();
+          if (sortOrder === SortOrder.Asc) {
+            if (aName > bName) {
+              return 1;
+            } else if (aName < bName) {
+              return -1;
+            }
+          } else if (sortOrder === SortOrder.Desc) {
+            if (aName > bName) {
+              return -1;
+            } else if (aName < bName) {
+              return 1;
+            }
+          }
+        }
+
+        return 0;
+      });
+  }, [identities, ignoredContainers, sortOrder]);
 
   const switchIdentity = (identity: ContextualIdentity) => {
     browser.tabs.getCurrent()

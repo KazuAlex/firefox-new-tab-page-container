@@ -32,6 +32,7 @@ module.exports = {
         'react/require-default-props': 'off',
         'no-console': ['error', { allow: ['warn', 'error'] }],
         'no-param-reassign': 'off',
+        'no-else-return': ['error', { allowElseIf: true }],
 
         // mui stuff: @see https://mui.com/material-ui/guides/minimizing-bundle-size/
         'no-restricted-imports': [

@@ -25,6 +25,7 @@ import { shallow } from 'zustand/shallow';
 import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import Theme from '@/types/theme';
+import SortOrder from '@/types/sort-order';
 
 type Props = {
   close: () => void,
@@ -36,12 +37,16 @@ function Settings({ close }: Props) {
     setIgnoredContainers,
     theme,
     setTheme,
+    sortOrder,
+    setSortOrder,
   ] = useSettingsStore(
     (state) => [
       state.ignoredContainers,
       state.setIgnoredContainers,
       state.theme,
       state.setTheme,
+      state.sortOrder,
+      state.setSortOrder,
     ],
     shallow,
   );
@@ -50,14 +55,20 @@ function Settings({ close }: Props) {
   const [isOnSave, setIsOnSave] = useState(false);
 
   const [ignoredContainersTemp, setIgnoredContainersTemp] = useState(ignoredContainers);
+  const [sortOrderTemp, setSortOrderTemp] = useState<SortOrder>(sortOrder);
 
-  const onChangeIgnoredContainers = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleIgnoredContainersChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIgnoredContainersTemp(event.target.value);
     setHasUnsaved(true);
   };
 
-  const onThemeChange = (event: SelectChangeEvent<Theme>) => {
+  const handleThemeChange = (event: SelectChangeEvent<Theme>) => {
     setTheme(event.target.value as Theme);
+  };
+
+  const handleSortOrderChange = (event: SelectChangeEvent<SortOrder>) => {
+    setSortOrderTemp(event.target.value as SortOrder);
+    setHasUnsaved(true);
   };
 
   const [openHelpWithRegexp, setOpenHelpWithRegexp] = useState(false);
@@ -69,6 +80,7 @@ function Settings({ close }: Props) {
     setIsOnSave(true);
     setHasUnsaved(false);
     setIgnoredContainers(ignoredContainersTemp);
+    setSortOrder(sortOrderTemp);
     setIsOnSave(false);
   };
 
@@ -119,7 +131,7 @@ function Settings({ close }: Props) {
               <Select
                 labelId="theme-selection"
                 value={theme}
-                onChange={onThemeChange}
+                onChange={handleThemeChange}
                 autoWidth
                 label="Theme"
               >
@@ -136,7 +148,7 @@ function Settings({ close }: Props) {
               rows={4}
               fullWidth
               value={ignoredContainersTemp}
-              onChange={onChangeIgnoredContainers}
+              onChange={handleIgnoredContainersChange}
               variant="filled"
               helperText={
                 (
@@ -150,7 +162,22 @@ function Settings({ close }: Props) {
               }
             />
           </div>
-          <div />
+          <div>
+            <FormControl fullWidth>
+              <InputLabel id="sort-order">Sort order</InputLabel>
+              <Select
+                labelId="sort-order"
+                value={sortOrderTemp}
+                onChange={handleSortOrderChange}
+                autoWidth
+                label="Sort Order"
+              >
+                <MenuItem value={SortOrder.Default}>Default</MenuItem>
+                <MenuItem value={SortOrder.Asc}>Ascending</MenuItem>
+                <MenuItem value={SortOrder.Desc}>Descending</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </Grid>
       </Container>
       <Modal
