@@ -59,11 +59,11 @@ function EditContainer({ close, container }: Props) {
     close();
   };
 
-  const onModalCancel = () => {
+  const handleModalCancel = () => {
     setIsOnDelete(false);
   };
 
-  const onModalConfirmDelete = async () => {
+  const handleModalConfirmDelete = async () => {
     setIsOnDelete(false);
     if (container) {
       await removeIdentity(container.cookieStoreId);
@@ -157,8 +157,8 @@ function EditContainer({ close, container }: Props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onModalCancel} autoFocus>Cancel</Button>
-          <Button onClick={onModalConfirmDelete}>Confirm</Button>
+          <Button onClick={handleModalCancel} autoFocus>Cancel</Button>
+          <Button onClick={handleModalConfirmDelete}>Confirm</Button>
         </DialogActions>
       </Dialog>
     </>
