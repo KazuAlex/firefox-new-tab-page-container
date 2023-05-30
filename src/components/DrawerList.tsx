@@ -1,4 +1,4 @@
-import WhatsNew from '@/components/WhatsNew';
+import Changelog from '@/components/Changelog';
 import Theme from '@/types/theme';
 import useSettingsStore from '@/stores/useSettingsStore';
 import {
@@ -34,14 +34,14 @@ function DrawerList({ openManageContainers, openSettings }: Props) {
     (state) => [state.theme, state.setTheme],
     shallow,
   );
-  const [whatsNewOpen, setWhatsNewOpen] = useState(false);
+  const [changelogOpen, setChangelogOpen] = useState(false);
 
   const handleThemeChange = (event: SelectChangeEvent<Theme>) => {
     setTheme(event.target.value as Theme);
   };
 
-  const handleWhatsNew = () => {
-    setWhatsNewOpen(true);
+  const handleChangelogOpen = () => {
+    setChangelogOpen(true);
   };
 
   return (
@@ -97,19 +97,19 @@ function DrawerList({ openManageContainers, openSettings }: Props) {
               </Select>
             </FormControl>
           </ListItem>
-          <ListItem key="whats-new" disablePadding>
-            <ListItemButton onClick={handleWhatsNew}>
+          <ListItem key="changelog" disablePadding>
+            <ListItemButton onClick={handleChangelogOpen}>
               <ListItemIcon>
                 <NewReleasesIcon />
               </ListItemIcon>
-              <ListItemText primary="What's new?" />
+              <ListItemText primary="Changelog" />
             </ListItemButton>
           </ListItem>
         </List>
       </Box>
-      <WhatsNew
-        open={whatsNewOpen}
-        onClose={() => setWhatsNewOpen(false)}
+      <Changelog
+        open={changelogOpen}
+        onClose={() => setChangelogOpen(false)}
       />
     </>
   );

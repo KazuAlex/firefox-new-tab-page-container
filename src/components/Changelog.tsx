@@ -11,11 +11,11 @@ type Props = {
   onClose: () => void,
 };
 
-function WhatsNew({ open, onClose }: Props) {
+function Changelog({ open, onClose }: Props) {
   return (
     <Modal
-      aria-labelledby="whats-new-modal-title"
-      aria-describedby="whats-new-modal-description"
+      aria-labelledby="changelog-modal-title"
+      aria-describedby="changelog-modal-description"
       open={open}
       onClose={onClose}
       closeAfterTransition
@@ -41,14 +41,14 @@ function WhatsNew({ open, onClose }: Props) {
           }}
         >
           <Typography
-            id="whats-new-modal-title"
+            id="changelog-modal-title"
             variant="h6"
             component="h2"
           >
-            What&apos;s new?
+            Changelog
           </Typography>
           <Typography
-            id="whats-new-modal-description"
+            id="changelog-modal-description"
             sx={{ mt: 2 }}
           >
             Changelog coming soon
@@ -59,4 +59,4 @@ function WhatsNew({ open, onClose }: Props) {
   );
 }
 
-export default WhatsNew;
+export default Changelog;
