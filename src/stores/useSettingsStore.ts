@@ -3,6 +3,7 @@ import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import SortOrder from '@/types/sort-order';
 import Theme from '@/types/theme';
 import storage from './customStorage';
+import TileSize from '@/types/tile-size';
 
 export type SettingsState = {
   theme: Theme,
@@ -11,6 +12,8 @@ export type SettingsState = {
   setIgnoredContainers: (value: string) => void,
   sortOrder: SortOrder,
   setSortOrder: (value: SortOrder) => void,
+  tileSize: TileSize,
+  setTileSize: (value: TileSize) => void,
 };
 
 export default create<SettingsState>()(
@@ -23,6 +26,8 @@ export default create<SettingsState>()(
         setIgnoredContainers: (value: string) => set((state) => ({ ...state, ignoredContainers: value })),
         sortOrder: SortOrder.Default,
         setSortOrder: (value: SortOrder) => set((state) => ({ ...state, sortOrder: value })),
+        tileSize: TileSize.Default,
+        setTileSize: (value: TileSize) => set((state) => ({ ...state, tileSize: value })),
       }),
       {
         name: 'settings',

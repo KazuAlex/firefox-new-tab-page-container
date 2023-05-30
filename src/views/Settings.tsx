@@ -26,6 +26,7 @@ import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import Theme from '@/types/theme';
 import SortOrder from '@/types/sort-order';
+import TileSize from '@/types/tile-size';
 
 type Props = {
   close: () => void,
@@ -39,6 +40,8 @@ function Settings({ close }: Props) {
     setTheme,
     sortOrder,
     setSortOrder,
+    tileSize,
+    setTileSize,
   ] = useSettingsStore(
     (state) => [
       state.ignoredContainers,
@@ -47,6 +50,8 @@ function Settings({ close }: Props) {
       state.setTheme,
       state.sortOrder,
       state.setSortOrder,
+      state.tileSize,
+      state.setTileSize,
     ],
     shallow,
   );
@@ -56,6 +61,7 @@ function Settings({ close }: Props) {
 
   const [ignoredContainersTemp, setIgnoredContainersTemp] = useState(ignoredContainers);
   const [sortOrderTemp, setSortOrderTemp] = useState<SortOrder>(sortOrder);
+  const [tileSizeTemp, setTileSizeTemp] = useState<TileSize>(tileSize);
 
   const handleIgnoredContainersChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIgnoredContainersTemp(event.target.value);
@@ -71,6 +77,11 @@ function Settings({ close }: Props) {
     setHasUnsaved(true);
   };
 
+  const handleTileSizeChange = (event: SelectChangeEvent<TileSize>) => {
+    setTileSizeTemp(event.target.value as TileSize);
+    setHasUnsaved(true);
+  }
+
   const [openHelpWithRegexp, setOpenHelpWithRegexp] = useState(false);
   const getHelpWithRegexp = () => {
     setOpenHelpWithRegexp(true);
@@ -81,6 +92,7 @@ function Settings({ close }: Props) {
     setHasUnsaved(false);
     setIgnoredContainers(ignoredContainersTemp);
     setSortOrder(sortOrderTemp);
+    setTileSize(tileSizeTemp);
     setIsOnSave(false);
   };
 
@@ -175,6 +187,24 @@ function Settings({ close }: Props) {
                 <MenuItem value={SortOrder.Default}>Default</MenuItem>
                 <MenuItem value={SortOrder.Asc}>Ascending</MenuItem>
                 <MenuItem value={SortOrder.Desc}>Descending</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <FormControl fullWidth>
+              <InputLabel id="sort-order">Tile size</InputLabel>
+              <Select
+                labelId="tile-size"
+                value={tileSizeTemp}
+                onChange={handleTileSizeChange}
+                autoWidth
+                label="Sort Order"
+              >
+                <MenuItem value={TileSize.ExtraSmall}>Extra Small</MenuItem>
+                <MenuItem value={TileSize.Small}>Small</MenuItem>
+                <MenuItem value={TileSize.Default}>Default</MenuItem>
+                <MenuItem value={TileSize.Large}>Large</MenuItem>
+                <MenuItem value={TileSize.ExtraLarge}>Extra Large</MenuItem>
               </Select>
             </FormControl>
           </div>
