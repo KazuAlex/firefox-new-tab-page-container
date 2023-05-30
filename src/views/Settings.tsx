@@ -144,7 +144,6 @@ function Settings({ close }: Props) {
                 labelId="theme-selection"
                 value={theme}
                 onChange={handleThemeChange}
-                autoWidth
                 label="Theme"
               >
                 <MenuItem value={Theme.System}>System</MenuItem>
@@ -181,7 +180,6 @@ function Settings({ close }: Props) {
                 labelId="sort-order"
                 value={sortOrderTemp}
                 onChange={handleSortOrderChange}
-                autoWidth
                 label="Sort Order"
               >
                 <MenuItem value={SortOrder.Default}>Default</MenuItem>
@@ -197,7 +195,6 @@ function Settings({ close }: Props) {
                 labelId="tile-size"
                 value={tileSizeTemp}
                 onChange={handleTileSizeChange}
-                autoWidth
                 label="Sort Order"
               >
                 <MenuItem value={TileSize.ExtraSmall}>Extra Small</MenuItem>
