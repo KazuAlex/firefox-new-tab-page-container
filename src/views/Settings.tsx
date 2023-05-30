@@ -26,7 +26,7 @@ import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import Theme from '@/types/theme';
 import SortOrder from '@/types/sort-order';
-import TileSize from '@/types/tile-size';
+import { TileSize } from '@/types/tile-size';
 
 type Props = {
   close: () => void,
@@ -80,7 +80,7 @@ function Settings({ close }: Props) {
   const handleTileSizeChange = (event: SelectChangeEvent<TileSize>) => {
     setTileSizeTemp(event.target.value as TileSize);
     setHasUnsaved(true);
-  }
+  };
 
   const [openHelpWithRegexp, setOpenHelpWithRegexp] = useState(false);
   const getHelpWithRegexp = () => {

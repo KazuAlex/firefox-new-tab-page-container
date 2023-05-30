@@ -6,8 +6,6 @@ export enum TileSize {
   ExtraLarge = 'xlarge',
 }
 
-export default TileSize;
-
 export enum Breakpoint {
   Xs = 'xs',
   Sm = 'sm',
@@ -16,7 +14,11 @@ export enum Breakpoint {
   Xl = 'xl',
 }
 
-export const TileSizeByBreakpoint = {
+export const TileSizeByBreakpoint: {
+  [key in TileSize]: {
+    [subkey in Breakpoint]: number;
+  }
+} = {
   [TileSize.ExtraSmall]: {
     [Breakpoint.Xs]: 4,
     [Breakpoint.Sm]: 3,
@@ -52,4 +54,4 @@ export const TileSizeByBreakpoint = {
     [Breakpoint.Lg]: 6,
     [Breakpoint.Xl]: 4,
   },
-}
+};

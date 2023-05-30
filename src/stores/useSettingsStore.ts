@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import SortOrder from '@/types/sort-order';
 import Theme from '@/types/theme';
+import { TileSize } from '@/types/tile-size';
 import storage from './customStorage';
-import TileSize from '@/types/tile-size';
 
 export type SettingsState = {
   theme: Theme,

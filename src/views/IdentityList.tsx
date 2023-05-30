@@ -1,8 +1,8 @@
-import { Unstable_Grid2 as Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Unstable_Grid2 as Grid } from '@mui/material';
 import { KeyboardEvent, useEffect, useMemo } from 'react';
 import useContextualIdentities from '@/hooks/useContextualIdentities';
 import type { ContextualIdentity } from '@/types/contextual-identities';
-import { Breakpoint, TileSizeByBreakpoint } from '@/types/tile-size';
+import { TileSizeByBreakpoint } from '@/types/tile-size';
 import useSettingsStore from '@/stores/useSettingsStore';
 
 function IdentityList() {
@@ -16,24 +16,9 @@ function IdentityList() {
     });
   };
 
-  const theme = useTheme();
-  const bpIsXs = useMediaQuery(theme.breakpoints.down('sm'));
-  const bpIsSm = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const bpIsMd = useMediaQuery(theme.breakpoints.between('md', 'lg'));
-  const bpIsLg = useMediaQuery(theme.breakpoints.between('lg', 'xl'));
-  const bpIsXl = useMediaQuery(theme.breakpoints.up('xl'));
-
-  const currentBreakpoint = useMemo(() => {
-    if (bpIsXs) return Breakpoint.Xs;
-    else if (bpIsSm) return Breakpoint.Sm;
-    else if (bpIsMd) return Breakpoint.Md;
-    else if (bpIsLg) return Breakpoint.Lg;
-    return Breakpoint.Xl;
-  }, [bpIsXs, bpIsSm, bpIsMd, bpIsLg, bpIsXl]);
-
   const currentTileSizes = useMemo(
     () => TileSizeByBreakpoint[tileSize],
-    [tileSize, currentBreakpoint],
+    [tileSize],
   );
 
   useEffect(() => {
@@ -60,6 +45,7 @@ function IdentityList() {
       <Grid container className="identities">
         {identities.map((identity: ContextualIdentity) => (
           <Grid
+            // eslint-disable-next-line react/jsx-props-no-spreading
             {...currentTileSizes}
           >
             <div className="identity-container">
@@ -98,6 +84,7 @@ function IdentityList() {
           </Grid>
         ))}
         <Grid
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...currentTileSizes}
         >
           <div className="identity-container">

@@ -1,7 +1,8 @@
+import WhatsNew from '@/components/WhatsNew';
+import Theme from '@/types/theme';
+import useSettingsStore from '@/stores/useSettingsStore';
 import {
-  Backdrop,
   Box,
-  Fade,
   FormControl,
   InputLabel,
   List,
@@ -10,9 +11,7 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
-  Modal,
   Select,
-  Typography,
 } from '@mui/material';
 import type {
   SelectChangeEvent,
@@ -22,14 +21,12 @@ import {
   NewReleases as NewReleasesIcon,
   Settings as SettingsIcon,
 } from '@mui/icons-material';
-import Theme from '@/types/theme';
 import { shallow } from 'zustand/shallow';
-import useSettingsStore from '@/stores/useSettingsStore';
 import { useState } from 'react';
 
 type Props = {
-  openSettings: () => void;
-  openManageContainers: () => void;
+  openSettings: () => void,
+  openManageContainers: () => void,
 };
 
 function DrawerList({ openManageContainers, openSettings }: Props) {
@@ -110,49 +107,10 @@ function DrawerList({ openManageContainers, openSettings }: Props) {
           </ListItem>
         </List>
       </Box>
-      <Modal
-        aria-labelledby="whats-new-modal-title"
-        aria-describedby="whats-new-modal-description"
+      <WhatsNew
         open={whatsNewOpen}
         onClose={() => setWhatsNewOpen(false)}
-        closeAfterTransition
-        slots={{
-          backdrop: Backdrop,
-        }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={whatsNewOpen}>
-          <Box
-            sx={{
-              position: 'absolute' as const,
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 400,
-              bgcolor: 'background.paper',
-              p: 4,
-            }}
-          >
-            <Typography
-              id="whats-new-modal-title"
-              variant="h6"
-              component="h2"
-            >
-              What&apos;s new?
-            </Typography>
-            <Typography
-              id="whats-new-modal-description"
-              sx={{ mt: 2 }}
-            >
-              Changelog coming soon
-            </Typography>
-          </Box>
-        </Fade>
-      </Modal>
+      />
     </>
   );
 }
