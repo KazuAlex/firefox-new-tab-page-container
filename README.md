@@ -25,6 +25,6 @@ You can use the Javascript's [RegExp](https://developer.mozilla.org/en-US/docs/W
 
 ## Next steps
 
-- [ ] Change the default order for the identities in the main page
-- [ ] Change how many identities in one line
+- [x] Change the default order for the identities in the main page
+- [x] Change how many identities in one line
 - [ ] Add another type of card in main page (link, ... ?)

@@ -38,6 +38,8 @@ function Changelog({ open, onClose }: Props) {
             width: 400,
             bgcolor: 'background.paper',
             p: 4,
+            maxHeight: 'calc(100vh - 50px)',
+            overflow: 'scroll',
           }}
         >
           <Typography
@@ -51,7 +53,40 @@ function Changelog({ open, onClose }: Props) {
             id="changelog-modal-description"
             sx={{ mt: 2 }}
           >
-            Changelog coming soon
+            <Typography
+              variant="h6"
+              component="h3"
+              sx={{ mt: 2 }}
+            >
+              Version 4.1.0
+            </Typography>
+            <Typography sx={{ mt: 2 }}>
+              UI tweaks<br />
+              New features:
+              <ul>
+                <li>Change order of containers under Settings page</li>
+                <li>Choose tile size under Settings page</li>
+                <li>Implement changelog modal</li>
+              </ul>
+            </Typography>
+            <Typography
+              variant="h6"
+              component="h3"
+              sx={{ mt: 4 }}
+            >
+              Version 4.0.0
+            </Typography>
+            <Typography sx={{ mt: 2 }}>
+              Complete rework of code<br />
+              Many new features:
+              <ul>
+                <li>Introduce a left drawer pane</li>
+                <li>Containers are managed in dedicated page</li>
+                <li>New settings page</li>
+                <li>Can filter containers list with setting "ignored containers"</li>
+                <li>New theme setting : "system" that display light or dark mode depending on your system preference</li>
+              </ul>
+            </Typography>
           </Typography>
         </Box>
       </Fade>
